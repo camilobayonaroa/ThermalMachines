@@ -1,0 +1,38 @@
+# ── Entorno virtual ──────────────────────────────────────────────────────────
+env/.venv/
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# ── Jupyter ──────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.nbconvert/
+profile_default/
+ipython_config.py
+
+# ── LaTeX (artefactos de compilación en docs/) ───────────────────────────────
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.xdv
+docs/paper/_build/
+docs/**/_minted-*/
+
+# ── Claude Code (configuración local de máquina, no compartible) ─────────────
+.claude/settings.local.json
+
+# ── Sistema operativo ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

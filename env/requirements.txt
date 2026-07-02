@@ -1,0 +1,26 @@
+# Entorno ThermalMachines AVA
+# Python 3.10 (sistema Ubuntu) + venv en env/.venv
+# Instalación: python3 -m venv --system-site-packages env/.venv
+#              env/.venv/bin/pip install -r env/requirements.txt
+#              env/.venv/bin/python -m ipykernel install --user --name thermal-machines --display-name "Python (ThermalMachines)"
+# VS Code: seleccionar intérprete env/.venv/bin/python
+
+# Termodinámica
+CoolProp==8.0.0
+
+# Widgets interactivos
+ipywidgets==8.1.8
+widgetsnbextension==4.0.15
+ipykernel==7.3.0
+
+# Visualización
+matplotlib==3.11.0
+plotly==6.8.0
+
+# Datos / matemáticas
+pandas==3.0.3
+networkx==3.6.1
+scikit-learn==1.9.0
+graphviz==0.21
+
+# Heredados del sistema (no reinstalar): numpy, scipy, sympy
