@@ -14,6 +14,24 @@ Lista e inventaría los temas en research_sources/ para que puedan luego ser inc
 ```
 
 ## Fase 1 — Transformación de un notebook
+
+Transforma notebooks_originales/01_Lección_Procesos_Politrópicos.ipynb según la skill ava-notebook-enhancer.
+Primero preséntame el plan de transformación celda por celda (qué prosa se elimina, qué ecuaciones se añaden, qué widgets se crean) y espera mi aprobación. Requisitos específicos: widget de los procesos termodinámicos con sliders de P, T sobre los diagramas P-V y T-s. Algunos sobre el domo de saturación CoolProp;
+Demostraciones de las integrales bajo el área P-V que conforman el cálculo del trabajo involucrado en cada proceso.
+widget de trabajo del proceso comparado contra las integrales manuales; 
+Reflexiones sobre la minimización o maximización del trabajo de cada proceso.
+Generalización de los procesos en un proceso politrópico con la tabla específica de cada proceso y trabajo.
+Al terminar: ejecuta el notebook completo, actualiza metrics.csv y la bitácora.
+
+
+Transforma notebooks_originales/01_Lección_Procesos_Politrópicos.ipynb según la skill ava-notebook-enhancer.
+Primero preséntame el plan de transformación celda por celda (qué prosa se elimina, qué ecuaciones se añaden, qué widgets se crean) y espera mi aprobación. Requisitos específicos: widget de los procesos termodinámicos con sliders de P, T sobre los diagramas P-V y T-s. Algunos sobre el domo de saturación CoolProp;
+Demostraciones de las integrales bajo el área P-V que conforman el cálculo del trabajo involucrado en cada proceso.
+widget de trabajo del proceso comparado contra las integrales manuales; 
+Reflexiones sobre la minimización o maximización del trabajo de cada proceso.
+Generalización de los procesos en un proceso politrópico con la tabla específica de cada proceso y trabajo.
+Al terminar: ejecuta el notebook completo, actualiza metrics.csv y la bitácora.
+
 ```
 Transforma notebooks_originales/03_ciclo_rankine.ipynb según la skill ava-notebook-enhancer.
 Primero preséntame el plan de transformación celda por celda (qué prosa se elimina,
