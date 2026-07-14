@@ -1,2 +1,11 @@
 notebook,fecha,prosa_palabras_antes,prosa_palabras_despues,reduccion_prosa_pct,celdas_antes,celdas_despues,widgets_interactivos,llamadas_coolprop,figuras_generadas,verificacion_error_pct,ejecuta_sin_errores
 01_Lección_Procesos_Politrópicos,2026-07-03,786,435,44.7,20,30,5,13,5,0.0,si
+02_Lección_Ciclos_Termodinámicos,2026-07-07,1213,2209,-82.1 (prosa conservada y ampliada por instrucción del profesor),28,50,9,45,10,0.081,si
+03_Lección_Ciclos_Biogeoquímicos,2026-07-07,1419 (original completo con fósiles),1552,prosa conservada; contenido fósil separado a NB04,39,40,9,0,10,0.1,si
+04_Lección_Combustibles_Fósiles,2026-07-07,0 (nuevo; separado de NB03 orig),795,contenido separado de NB03 original,0,28,2,0,8,0.0,si
+05_Lección_Repaso_Química,2026-07-07,1361 (original completo con cinética),1663,prosa conservada y reordenada en hilo lógico; cinética separada a NB06,31,38,7,0,13,0.0,si
+06_Lección_Cinética_Reacción,2026-07-07,0 (nuevo; separado de NB04 orig),766,contenido de cinética separado del original 4,0,16,4,0,6,0.0,si
+05b_Bonus_Reacciones_Nucleares,2026-07-07,0 (nuevo; módulo de frontera research-to-classroom),667,adaptado de EntregasCurso (proyecto nuclear estudiantil),0,23,6,0,11,0.2,si
+07_Lección_Modelación_Combustión,2026-07-14,4168 (original completo con cinética),3819,prosa conservada; cinética separada a NB08,50,36,5,969,6,0.181,si
+08_Lección_Cinética_Combustión,2026-07-14,0 (nuevo; cinética separada del NB05 orig),2654,contenido de cinética separado del original 5,0,27,6,0,8,0.0,si
+08b_Bonus_Combustión_Biomasa,2026-07-14,0 (nuevo; módulo de frontera research-to-classroom),1262,adaptado del artículo EFB/PMF (Biofuels Combustion),0,19,3,0,4,0.273,si

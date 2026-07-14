@@ -1,26 +1,49 @@
-# Entorno ThermalMachines AVA
-# Python 3.10 (sistema Ubuntu) + venv en env/.venv
-# Instalación: python3 -m venv --system-site-packages env/.venv
-#              env/.venv/bin/pip install -r env/requirements.txt
-#              env/.venv/bin/python -m ipykernel install --user --name thermal-machines --display-name "Python (ThermalMachines)"
-# VS Code: seleccionar intérprete env/.venv/bin/python
+# =============================================================================
+# Entorno ThermalMachines AVA — venv local reproducible
+# =============================================================================
+# Objetivo: que el MISMO notebook se ejecute idéntico en local y en Google Colab.
+#
+# --- Instalación LOCAL (Ubuntu) ---------------------------------------------
+# Se usa un venv AISLADO (sin --system-site-packages) sobre Python 3.11
+# para NO heredar paquetes de conda base (evita el numpy 1.26 fugado):
+#
+#   /home/camilo/miniconda3/bin/python3.11 -m venv env/.venv
+#   env/.venv/bin/python -m pip install --upgrade pip
+#   env/.venv/bin/pip install -r env/requirements.txt
+#   env/.venv/bin/python -m ipykernel install --user \
+#         --name thermal-machines --display-name "Python (ThermalMachines)"
+#
+# VS Code: en el selector de kernel del notebook elegir "Python (ThermalMachines)".
+# NO ejecutar `conda install -n base ipykernel`: base no tiene CoolProp ni widgets.
+#
+# --- Colab -------------------------------------------------------------------
+# Colab ya trae numpy/scipy/pandas/matplotlib/ipywidgets. Lo único que falta es
+# CoolProp; la primera celda de cada notebook lo instala automáticamente
+# (bootstrap protegido por `if 'google.colab' in sys.modules`).
+#
+# Versiones fijadas para reproducibilidad. Python objetivo: 3.11 (igual que Colab).
+# =============================================================================
 
-# Termodinámica
+# Termodinámica (NO viene en Colab: se instala vía bootstrap allí)
 CoolProp==8.0.0
 
-# Widgets interactivos
+# Kernel + widgets interactivos
+ipykernel==7.3.0
 ipywidgets==8.1.8
 widgetsnbextension==4.0.15
-ipykernel==7.3.0
+notebook==7.6.0
+
+# Ciencia / matemáticas  (numpy 2.x: mismo major que Colab; habilita np.trapezoid)
+numpy==2.4.6
+scipy==1.17.1
+sympy==1.14.0
+pandas==3.0.3
+scikit-learn==1.9.0
 
 # Visualización
 matplotlib==3.11.0
 plotly==6.8.0
 
-# Datos / matemáticas
-pandas==3.0.3
+# Grafos
 networkx==3.6.1
-scikit-learn==1.9.0
 graphviz==0.21
-
-# Heredados del sistema (no reinstalar): numpy, scipy, sympy
