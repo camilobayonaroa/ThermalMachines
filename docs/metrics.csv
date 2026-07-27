@@ -9,3 +9,7 @@ notebook,fecha,prosa_palabras_antes,prosa_palabras_despues,reduccion_prosa_pct,c
 07_Lección_Modelación_Combustión,2026-07-14,4168 (original completo con cinética),3819,prosa conservada; cinética separada a NB08,50,36,5,969,6,0.181,si
 08_Lección_Cinética_Combustión,2026-07-14,0 (nuevo; cinética separada del NB05 orig),2654,contenido de cinética separado del original 5,0,27,6,0,8,0.0,si
 08b_Bonus_Combustión_Biomasa,2026-07-14,0 (nuevo; módulo de frontera research-to-classroom),1262,adaptado del artículo EFB/PMF (Biofuels Combustion),0,19,3,0,4,0.273,si
+09_Lección_Tecnología_Combustión,2026-07-16,4851,5923,prosa conservada + marco de fenómenos añadido; contenido de combustibles deduplicado con NB04,54,33,7,1200,13,0.011,si
+10_Lección_Máquinas_CompresoresTurbinasReciprocantes,2026-07-21,2386,3301,prosa conservada + marco politrópico (L1) y recuadros "qué obstáculo resuelve" añadidos; alcance restringido a compresores (motores diferidos a lección posterior),39,47,6,700,8,0.538,si
+11_Lección_Motores_Reciprocantes,2026-07-21,5713,6645,ningún tema eliminado (instrucción del profesor); prosa creció por marco politrópico (L1/L10) + recuadros de fenómeno + nota de corrección aritmética,46,57,8,600,4,0.075,si
+12_Lección_Ensayo_de_Motores,2026-07-21,936,2474,sección nueva §7.5 dinámica rotacional (pedida explícitamente); ecuaciones existentes reformateadas a display math,18,32,8,0,4,0.299,si
