@@ -13,3 +13,7 @@ notebook,fecha,prosa_palabras_antes,prosa_palabras_despues,reduccion_prosa_pct,c
 10_Lección_Máquinas_CompresoresTurbinasReciprocantes,2026-07-21,2386,3301,prosa conservada + marco politrópico (L1) y recuadros "qué obstáculo resuelve" añadidos; alcance restringido a compresores (motores diferidos a lección posterior),39,47,6,700,8,0.538,si
 11_Lección_Motores_Reciprocantes,2026-07-21,5713,6645,ningún tema eliminado (instrucción del profesor); prosa creció por marco politrópico (L1/L10) + recuadros de fenómeno + nota de corrección aritmética,46,57,8,600,4,0.075,si
 12_Lección_Ensayo_de_Motores,2026-07-21,936,2474,sección nueva §7.5 dinámica rotacional (pedida explícitamente); ecuaciones existentes reformateadas a display math,18,32,8,0,4,0.299,si
+10b_Bonus_Mecanismo_Compresion_Variable,2026-09-30,0 (nuevo; modulo de frontera research-to-classroom),1560,modulo nuevo derivado de informe de Estatica (motor VCR),0,22,3,0,4,0.1001,si
+13_Lección_Plantas_Turbinas_Gas,2026-09-30,2883,3844,prosa conservada integra + ecuaciones/recuadros añadidos; 6 esquemas externos reemplazados por Atlas interactivo,13,30,5,180,7,0.271,si
+14_Lección_Modelamiento_Turbina_de_gas,2026-09-30,5879,7299,prosa conservada integra + notas de hallazgos (bug admision, bug area, S7 reescrita) + 3 secciones nuevas (S8-S10),38,62,4,0,10,0.0,si
+11b_Bonus_Motor_Wankel,2026-10-01,0 (nuevo; modulo de frontera research-to-classroom),2328,modulo nuevo derivado de articulo Wankel 4T (geometria+termo+par vectorial),0,29,3,0,6,2.03,si

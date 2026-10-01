@@ -1,0 +1,334 @@
+% Presentación de primera clase — Máquinas térmicas para ingenieros
+% Pontificia Universidad Javeriana — Prof. Camilo Bayona
+% Compilar con: pdflatex (dos pasadas) — no requiere paquetes exóticos.
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+\usefonttheme{professionalfonts}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noindentfirst]{babel}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{array}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+\title[Máquinas Térmicas — Rediseño 2026]{Máquinas térmicas para ingenieros}
+\subtitle{Rediseño metodológico: AVA + cátedra invertida + proyecto aplicado}
+\author{Camilo Bayona}
+\institute[PUJ]{Pontificia Universidad Javeriana \\ Facultad de Ingeniería — Departamento de Ingeniería Industrial}
+\date{Primera sesión, 2026}
+
+\begin{document}
+
+% ---------------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ---------------------------------------------------------------
+\begin{frame}{Agenda de hoy}
+  \tableofcontents
+\end{frame}
+
+% =================================================================
+\section{Contexto}
+% =================================================================
+\begin{frame}{¿Por qué actualizamos el curso?}
+  \begin{itemize}
+    \item El curso ya cubre ciclos reales, combustión, calderas, motores reciprocantes, turbinas de gas,
+      plantas de vapor, cogeneración y refrigeración.
+    \item Se conserva \textbf{todo} el alcance disciplinar aprobado (ID CURSO 036053).
+    \item Lo que cambia es \textbf{cómo se entrega, se discute y se aplica} ese contenido.
+    \item Cuatro decisiones pedagógicas, con evaluación cuantitativa (rigurosidad de ingeniería) y
+      cualitativa (liderazgo de proyecto y de negocio en equipo).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Modelo: Cátedra — Tecnología — Proyecto}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \textbf{Antes}
+      \begin{itemize}
+        \item Clase magistral en el aula.
+        \item Notas de clase estáticas.
+        \item Evaluación centrada en parciales.
+      \end{itemize}
+    \column{0.48\textwidth}
+      \textbf{Ahora}
+      \begin{itemize}
+        \item OVA interactivos (Jupyter + CoolProp) en Teams desde el día 1.
+        \item Aula = discusión invertida.
+        \item Proyecto aplicado: maqueta de motor + modelo de negocio.
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% =================================================================
+\section{Cuatro ideas pedagógicas}
+% =================================================================
+\begin{frame}{Idea 1 — AVA en Teams desde el primer día}
+  \begin{itemize}
+    \item Todos los OVA (cuadernos + datos + bibliografía) se publican en Teams \textbf{desde la sesión 1},
+      no semana a semana.
+    \item El estudiante siempre tiene el cuadernillo disponible para leerlo y prepararlo \textbf{antes} de
+      cada sesión presencial.
+    \item Permite avanzar a ritmo propio y llegar a clase con preguntas concretas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Idea 2 — Sesión presencial invertida}
+  \begin{itemize}
+    \item El aula \textbf{no repite} lo que ya está en el OVA.
+    \item Se proyectan las temáticas y se discuten activamente entre el profesor y los estudiantes.
+    \item Objetivo: la sesión más invertida, participativa y \textbf{divertida} posible.
+    \item El tiempo de aula se usa para resolver dudas, profundizar casos y conectar con el proyecto.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Idea 3 — Proyecto aplicado: maqueta didáctica de un motor térmico}
+  \begin{enumerate}
+    \item \textbf{Memoria de cálculo}: modelación termodinámica del motor en Jupyter + CoolProp,
+      extendiendo los OVA del curso.
+    \item \textbf{Diseño geométrico}: modelador CAD y ensamblador de proyectos mecánicos, trazable a la
+      memoria de cálculo.
+    \item \textbf{Fabricación y ensamblaje}: impresión 3D en PETG (material del profesor) y ensamblaje en
+      las máquinas herramientas del \textbf{CTAI}.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Idea 4 — Modelo de negocio}
+  \begin{itemize}
+    \item Cada equipo concibe un \textbf{modelo de negocio} basado en las capacidades de ingeniería térmica
+      del curso.
+    \item Debe demostrar \textbf{pertinencia y viabilidad comercial en el mercado nacional}.
+    \item Se sustenta junto con la maqueta y su memoria de cálculo: la solución técnica se defiende también
+      como propuesta de valor.
+  \end{itemize}
+\end{frame}
+
+% =================================================================
+\section{Evaluación}
+% =================================================================
+\begin{frame}{Evaluación: cuantitativa + cualitativa}
+  \begin{table}
+    \small
+    \begin{tabularx}{\linewidth}{lcXX}
+      \toprule
+      \textbf{Corte} & \textbf{Peso} & \textbf{Cuantitativo (rigor técnico)} & \textbf{Cualitativo (liderazgo)} \\
+      \midrule
+      1 & 30\% & Talleres/parcial ciclos + combustión; memoria de cálculo preliminar & Constitución de
+        equipo y cronograma; selección del negocio. \\
+      2 & 30\% & Parcial-taller calderas + reciprocantes; diseño CAD trazable & Avance de fabricación en
+        CTAI; gestión de equipo; avance del negocio. \\
+      3 & 40\% & Maqueta fabricada + memoria completa; examen final & Sustentación del modelo de negocio;
+        liderazgo del proyecto \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+\end{frame}
+
+% =================================================================
+\section{Los OVA del curso}
+% =================================================================
+\begin{frame}{OVA ya construidos y verificados (bloques 1–5)}
+  \small
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+      \begin{enumerate}
+        \item Procesos Politrópicos
+        \item Ciclos Termodinámicos
+        \item Ciclos Biogeoquímicos
+        \item Combustibles Fósiles
+        \item Repaso de Química
+        \item[5b.] Reacciones Nucleares \emph{(frontera)}
+        \item Cinética de Reacción
+      \end{enumerate}
+    \column{0.5\textwidth}
+      \begin{enumerate}
+        \setcounter{enumi}{7}
+        \item Modelación de la Combustión
+        \item Cinética de Combustión
+        \item[8b.] Combustión de Biomasa \emph{(frontera)}
+        \item Tecnología de la Combustión
+        \item Compresores y Turbinas Reciprocantes
+        \item Motores Reciprocantes
+        \item Ensayo de Motores
+      \end{enumerate}
+  \end{columns}
+  \vspace{0.3cm}
+  \footnotesize Cada uno ejecuta sin errores y verifica con error $<1\%$ frente a un caso de referencia.
+\end{frame}
+
+\begin{frame}{Lo que sigue viéndose cada semestre — Bloque 6}
+  \textbf{Motores de turbina de gas} \emph{(OVA en construcción; por ahora, cátedra)}
+  \begin{itemize}
+    \item Ciclo \textbf{Brayton}: ideal, regenerativo, con recalentamiento, con enfriamiento intermedio en
+      la compresión.
+    \item Compresor centrífugo y axial; cámara de combustión; turbina radial y axial.
+    \item Propulsión aeronáutica: turborreactor, turboventilador, turbohélice, Ramjet, Scramjet.
+    \item Motores de autopropulsión: ecuación fundamental de la astronáutica, tobera, motor químico
+      (sólido, líquido, híbrido).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Lo que sigue viéndose cada semestre — Bloques 7 a 9}
+  \small
+  \textbf{Bloque 7 — Plantas térmicas con turbina de vapor}
+  \begin{itemize}
+    \item Ciclo \textbf{Rankine}: ideal/real, con sobrecalentamiento, con recalentamiento, con
+      regeneración, supercrítico. Turbinas de vapor, calderas, condensador y bomba de presión.
+  \end{itemize}
+  \textbf{Bloque 8 — Plantas de cogeneración}
+  \begin{itemize}
+    \item Tipologías (turbina de gas, vapor, reciprocante, ciclo combinado); rendimientos, ahorro de
+      combustible.
+  \end{itemize}
+  \textbf{Bloque 9 — Máquinas de refrigeración y aire acondicionado}
+  \begin{itemize}
+    \item Ciclo de compresión de vapor (\textbf{Rankine inverso}), absorción, refrigeración evaporativa;
+      psicrometría, temperatura de bulbo seco/húmedo.
+  \end{itemize}
+  \vspace{0.2cm}
+  \footnotesize Se dictan por ahora con el material de cátedra existente (\texttt{notebooks\_originales/10-15});
+  quedan priorizados para la siguiente fase de transformación a OVA.
+\end{frame}
+
+% =================================================================
+\section{Motivación}
+% =================================================================
+\begin{frame}{Lo que ya ha salido de este curso}
+  \begin{itemize}
+    \item Este no es el primer semestre en que un proyecto de Máquinas Térmicas se toma en serio.
+    \item Varios equipos y trabajos de grado de semestres anteriores llegaron a resultados publicables,
+      prototipos físicos y herramientas con relevancia de industria.
+    \item Cuatro ejemplos reales, del propio archivo del curso:
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ejemplo 1 — de un proyecto a un artículo científico}
+  \textbf{``One-Dimensional Numerical Modelling of a Supersonic RAMJET Engine with Parametrizable Geometry''}
+  \small (S.\ Cadavid Franco, C.\ Bayona Roa)
+  \begin{itemize}
+    \item Modelo 1D en MATLAB de un motor RAMJET supersónico, geometría parametrizable, validado contra
+      literatura (Dallos).
+    \item Resultados: empuje neto \textbf{1719.4 N}, impulso específico \textbf{2094.6 s}, Mach de salida
+      \textbf{2.033}, eficiencia global \textbf{30.3\%}.
+    \item Incluye análisis de sensibilidad completo (Mach de vuelo, geometría del difusor, relación
+      combustible-aire, recuperación de presión).
+    \item Es exactamente el tipo de contenido del \textbf{Bloque 6} (turbinas de gas / propulsión) que aún
+      no tiene su OVA — candidato natural para tu proyecto.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ejemplo 2 — de un trabajo de grado a un prototipo físico}
+  \textbf{TG253015 — ``Desarrollo tecnológico de un motor rotativo Wankel de 6 tiempos mediante la
+  modelación termo-mecánica de su funcionamiento''}
+  \begin{itemize}
+    \item Motor Wankel de 6 tiempos con segunda combustión controlada, dos variantes geométricas
+      (3 lóbulos/4 caras y 4 lóbulos/5 caras), modelado 100\% en Python.
+    \item Tres configuraciones comparadas: válvula de expansión, sobrealimentado, inyección de agua.
+    \item Resultado: la variante con válvula de expansión alcanza \textbf{68.3\%} de eficiencia térmica,
+      frente a \textbf{30.9\%} del motor convencional de 4 tiempos.
+    \item Video del concepto y anexos completos disponibles en el archivo del curso — un trabajo de grado
+      que empezó como proyecto de Máquinas Térmicas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ejemplo 3 — proyecto con pertinencia de mercado nacional}
+  \textbf{[241030] ``Simulation of Turboprop Systems using Simulink: Development and Validation of
+  Computational Mechanical Model''}
+  \begin{itemize}
+    \item Herramienta computacional (Simulink + teoría BEMT) para simular un motor turbohélice bajo
+      distintas condiciones de vuelo y combustibles.
+    \item Validada contra datos reales de turbohélice (p.\,ej.\ familia PT6/ATR).
+    \item Los propios autores lo plantean como soporte para \textbf{mantenimiento, manufactura y
+      reconversión energética a nivel nacional} — exactamente la lógica de la \textbf{Idea 4} (modelo de
+      negocio de pertinencia nacional).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ejemplo 4 — los proyectos de curso también dejan huella}
+  \footnotesize
+  Entregas de semestres recientes, con autoría de sus propios estudiantes:
+  \begin{itemize}
+    \item \emph{Planta Termoeléctrica} — cogeneración, equipos hidráulicos y termodinámicos (J.A.\ Sánchez,
+      J.D.\ Aparicio, J.D.\ Roa).
+    \item \emph{Energía Nuclear} — adaptado como OVA 05b, módulo de frontera (A.G.\ Belalcázar, S.F.\ Triana,
+      S.\ Lemus, J.C.\ Pineda).
+    \item \emph{Modelamiento termo-fluido de un intercooler aire-aire} acoplado a un motor diésel (J.C.\ Muñoz,
+      S.G.\ Pedraza).
+    \item \emph{Disipación térmica para dispositivos electrónicos} (J.E.\ Dávila, J.D.\ Saavedra).
+    \item \emph{Análisis de combustibles para la Fórmula 1} (A.G.\ Belalcázar, S.\ Libos Dallos).
+    \item \emph{Intercooler en un motor Wankel 6T turboalimentado} — taller de tercer corte.
+  \end{itemize}
+  \vspace{0.2cm}
+  Y el artículo sobre combustión de EFB/PMF de palma (Arias-Guerrero, Castillo-Hernández, Mayorga-Guzmán,
+  Bayona-Roa) hoy es el \textbf{OVA 08b} de este mismo curso.
+\end{frame}
+
+% =================================================================
+\section{Proyección}
+% =================================================================
+\begin{frame}{¿Hasta dónde puede llegar tu proyecto?}
+  \centering
+  \begin{tabular}{cccc}
+    \textbf{Proyecto de curso} & $\rightarrow$ & \textbf{Semillero de Máquinas} & \\
+    \small (maqueta + negocio) & & \small investigación aplicada &  \\[0.4cm]
+  \end{tabular}
+
+  \begin{tabular}{ccc}
+    \textbf{Trabajo / Proyecto de grado} & $\rightarrow$ & \textbf{Artículo científico} \\
+    \small ej.\ TG253015 (Wankel 6T) & & \small ej.\ RAMJET, EFB/PMF (OVA 08b) \\
+  \end{tabular}
+  \vspace{0.5cm}
+
+  \raggedright
+  \begin{itemize}
+    \item El camino \textbf{ya está recorrido} por otros equipos de este curso — no es hipotético.
+    \item Un buen proyecto de maqueta puede convertirse en línea de trabajo del \textbf{Semillero de
+      Máquinas}, en \textbf{trabajo o proyecto de grado}, o incluso en \textbf{publicación} co-autoría con
+      el profesor.
+    \item La calidad técnica (memoria de cálculo, validación, trazabilidad CAD-fabricación) es lo que abre
+      esa puerta.
+  \end{itemize}
+\end{frame}
+
+% =================================================================
+\section{Cronograma}
+% =================================================================
+\begin{frame}{Hitos del proyecto en el semestre}
+  \begin{itemize}
+    \item \textbf{Semana 1} — Entrega de OVA en Teams; conformación de equipos.
+    \item \textbf{Semana 6} — Cierre Corte 1: kick-off formal del proyecto, memoria de cálculo preliminar.
+    \item \textbf{Semana 10} — Memoria de cálculo consolidada + diseño CAD del motor.
+    \item \textbf{Semana 12} — Cierre Corte 2: avance de fabricación en el CTAI.
+    \item \textbf{Semana 16} — Cierre Corte 3: entrega de la maqueta ensamblada y sustentación del modelo
+      de negocio.
+  \end{itemize}
+\end{frame}
+
+% =================================================================
+\section{Cierre}
+% =================================================================
+\begin{frame}{Lo que se espera de cada equipo}
+  \begin{itemize}
+    \item Preparar cada OVA \textbf{antes} de la sesión presencial.
+    \item Participar activamente en la discusión invertida.
+    \item Sostener el rigor técnico de la memoria de cálculo.
+    \item Liderar el proyecto como un equipo real, con roles y cronograma.
+    \item Defender la maqueta \emph{y} su modelo de negocio.
+  \end{itemize}
+  \vspace{0.3cm}
+  Los ejemplos de hoy (RAMJET, Wankel 6T, Turboprop, EFB/PMF) empezaron como proyectos de este curso.
+  \textbf{El próximo podría ser el tuyo.}
+  \vspace{0.3cm}
+  \centering \Large ¡Bienvenidos al curso!
+\end{frame}
+
+\end{document}
