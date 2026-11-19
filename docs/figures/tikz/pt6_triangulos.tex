@@ -1,0 +1,52 @@
+% NB14a -- Triangulos de velocidad de linea media: etapa axial (rotor) y salida del impulsor centrifugo con deslizamiento.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,angles,quotes}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{abs}{HTML}{2A78D6}
+\definecolor{rel}{HTML}{E34948}
+\definecolor{pala}{HTML}{3A3A38}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  va/.style={-{Stealth[length=2.6mm]}, line width=1.3pt, abs},
+  vr/.style={-{Stealth[length=2.6mm]}, line width=1.3pt, rel},
+  vu/.style={-{Stealth[length=2.6mm]}, line width=1.3pt, pala},
+  tag/.style={font=\small}]
+  % ---------- etapa axial (rotor): c = w + U ; U hacia +x (sentido de giro)
+  \node[font=\bfseries\small] at (1.2,6.0) {Rotor axial: entrada (1) y salida (2)};
+  \coordinate (O) at (0,0); \coordinate (Y) at (0,2.5);
+  \coordinate (C1) at (0.5,2.5); \coordinate (W1) at (-3.7,2.5);
+  \draw[tinta!40, dashed] (0,0) -- (0,3.4) node[above, tag] {eje $x$};
+  \draw[vr] (O) -- (W1) node[pos=0.55, below left, tag] {$w_1$};
+  \draw[va] (O) -- (C1) node[pos=0.6, right, tag] {$c_1$};
+  \draw[vu] (W1) -- (C1) node[midway, above, tag] {$U=\omega r_m$};
+  \pic[draw, rel, angle radius=11mm, "$\beta_1$", angle eccentricity=1.35, font=\small] {angle=Y--O--W1};
+  \node[tag] at (2.3,1.2) {$\tan\beta_1=\dfrac{U}{c_x}-\tan\alpha_1$};
+  \begin{scope}[shift={(0,-4.2)}]
+  \coordinate (O2) at (0,0); \coordinate (Y2) at (0,2.5);
+  \coordinate (W2) at (-2.5,2.5); \coordinate (C2) at (1.7,2.5);
+  \draw[tinta!40, dashed] (O2) -- (0,3.2);
+  \draw[vr] (O2) -- (W2) node[pos=0.55, below left, tag] {$w_2$};
+  \draw[va] (O2) -- (C2) node[pos=0.6, right, tag] {$c_2$};
+  \draw[vu] (W2) -- (C2) node[midway, above, tag] {$U$};
+  \pic[draw, rel, angle radius=11mm, "$\beta_2$", angle eccentricity=1.4, font=\small] {angle=Y2--O2--W2};
+  \node[tag, text width=7.0cm, anchor=north west] at (-3.9,-0.25) {$w = U\,(c_{\theta 2}-c_{\theta 1})$,\quad $c_{\theta 2}=U-c_x\tan\beta_2$\\[2pt]
+  $\psi=\dfrac{w}{U^2}=1-\phi\,(\tan\alpha_1+\tan\beta_2)$,\quad $\phi=\dfrac{c_x}{U}$\\[2pt]
+  $\beta_2=\beta_{2,\text{metal}}+\delta$ (desviaci\'on), incidencia $i=\beta_1-\beta_{1,\text{metal}}$ $\Rightarrow$ p\'erdidas $\eta(i)$};
+  \end{scope}
+  % ---------- centrifugo
+  \begin{scope}[shift={(9.0,0)}]
+  \node[font=\bfseries\small] at (1.8,5.6) {Impulsor centr\'ifugo: salida (radio $r_2$)};
+  \coordinate (P) at (0,0);
+  \draw[tinta!40, dashed] (P) -- (0,4.6) node[above, tag] {radial};
+  \draw[vr] (P) -- (-1.25,1.6) node[midway, left, tag] {$w_2$};
+  \draw[vu] (-1.25,1.6) -- (4.2,1.6) node[pos=0.6, above, tag] {$U_2=\omega r_2$};
+  \draw[va] (P) -- (3.5,1.6) node[pos=0.55, below right, tag] {$c_2$};
+  \draw[tinta, densely dotted] (3.5,1.6) -- (4.2,1.6);
+  \draw[cota] (3.5,2.2) -- (4.2,2.2) node[midway, above, font=\scriptsize] {desliz.};
+  \node[tag, text width=6.2cm, anchor=north west] at (-1.6,-0.4) {$c_{\theta 2}=\sigma\,U_2-c_{r2}\cot\beta_2$,\quad $c_{r2}=\dfrac{\dot m}{\rho_2\,2\pi r_2 b_2}$\\[2pt]
+  $w_{cen}=U_2\,c_{\theta 2}$ (entrada sin pre-rotaci\'on)\\[2pt]
+  $\sigma\approx0.88$: deslizamiento (n\'umero finito de \'alabes)};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

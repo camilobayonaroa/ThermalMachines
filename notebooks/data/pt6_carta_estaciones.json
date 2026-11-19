@@ -1,0 +1,43 @@
+{
+ "fuente": "Pratt & Whitney Canada, carta 'STATIONS (GRAPH)' del PT6A (despegue, dia estandar, nivel del mar), reproducida como Fig. 7.1.1 en Castellanos-Proanos (2019), tesis Universidad ECCI (research_sources/Turboprop Engine/PT6 Simulation.zip, PT6FINAL.pdf p. 56).",
+ "metodo": "Imagen embebida extraida con pdfimages (699x509 px). Ejes calibrados con la posicion de las etiquetas 0-1200 C (36.6 px/300 C) y 0-120 psia (37.1 px/30 psia; el eje de presion esta desplazado ~7 px respecto al de temperatura). Marcadores localizados por color (rojo T, azul p) en la columna de cada estacion.",
+ "incertidumbre": {
+  "T_C": 8.0,
+  "p_psia": 0.8
+ },
+ "nota": "Las estaciones 2.5 y 2.8 no cierran el balance de energia de la etapa axial (eficiencia aparente <0.6); se reportan pero no se usan para calibrar.",
+ "estaciones": {
+  "2": {
+   "T_C": 24,
+   "p_psia": 13.4
+  },
+  "2.5": {
+   "T_C": 118,
+   "p_psia": 23.4
+  },
+  "2.8": {
+   "T_C": 174,
+   "p_psia": 31.9
+  },
+  "3": {
+   "T_C": 316,
+   "p_psia": 111.7
+  },
+  "4": {
+   "T_C": 1070,
+   "p_psia": 109.3
+  },
+  "5": {
+   "T_C": 738,
+   "p_psia": 41.2
+  },
+  "6": {
+   "T_C": 608,
+   "p_psia": 18.1
+  },
+  "7": {
+   "T_C": 551,
+   "p_psia": 14.0
+  }
+ }
+}

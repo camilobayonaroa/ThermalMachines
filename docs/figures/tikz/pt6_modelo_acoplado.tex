@@ -1,0 +1,56 @@
+% NB14a -- Arquitectura del modelo acoplado del turbohelice PT6A-61: bloques cuasi-estaticos (turbomaquinas,
+% helice de Traub) y bloques con EDO en el tiempo (ejes, camara de combustion, combustible, paso, piloto).
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,positioning,fit,backgrounds}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{frio}{HTML}{2A78D6}
+\definecolor{gg}{HTML}{4A3AA7}
+\definecolor{caliente}{HTML}{E34948}
+\definecolor{pt}{HTML}{EB6834}
+\definecolor{helice}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  est/.style={draw=tinta, line width=0.9pt, rounded corners=2pt, align=center, font=\footnotesize, minimum height=14mm, text width=32mm, fill=white},
+  ode/.style={est, line width=1.6pt, fill=frio!8},
+  ctl/.style={est, dashed, fill=helice!10},
+  sig/.style={-{Stealth[length=2.2mm]}, line width=1pt, tinta},
+  sigc/.style={-{Stealth[length=2.2mm]}, line width=0.9pt, helice!60!black, dashed},
+  tag/.style={font=\scriptsize\itshape, text=tinta!75}]
+  \node[est, fill=frio!5] (atm) at (0,4) {\textbf{Atm\'osfera ISA + admisi\'on}\\$h,\;V,\;\Delta T$ $\to$ $T_2,\,p_2,\,\rho,\,\mu$};
+  \node[est, fill=frio!20] (cmp) at (4.4,4) {\textbf{Compresor} 3A+1C\\l\'inea media (Euler) $\to$\\mapa $\Pi(\dot m_c, N_c)$};
+  \node[ode, fill=caliente!10] (cc) at (8.8,4) {\textbf{C\'amara 0D}\\$\dot M=\dot m_c+\dot w_f-\dot m_4$\\$\dot U=\dot H_{in}-\dot m_4 h_4$};
+  \node[est, fill=gg!15] (tc) at (13.2,4) {\textbf{Turbina del compresor}\\tobera estrangulada\\$\eta(\nu)$, $\nu=U/c_0$};
+  \node[est, fill=pt!20] (tp) at (13.2,1.2) {\textbf{Turbina libre}\\tobera $\dot m\sqrt{T}/p$\\$\eta(\nu_p)$ $\to$ par cae con $N_p$};
+  \node[est, fill=helice!15] (hel) at (4.4,1.2) {\textbf{H\'elice} (Traub)\\$T,\;Q=f(\beta,\Omega,V,\rho,\mu)$\\McCauley 4 palas};
+  \node[ode, fill=gg!8] (egg) at (13.2,6.9) {\textbf{Eje $N_g$}\\$I_g\dot\omega_g=\frac{\eta_m P_{TC}-P_C-P_{acc}}{\omega_g}$};
+  \node[ode, fill=pt!8, text width=36mm] (ept) at (8.8,1.2) {\textbf{Eje $N_p$ + reductor}\\$I_{ef}\dot\omega_p=\frac{\eta_{r}P_{TP}-Q\,\Omega}{\omega_p}$};
+  \node[ctl] (fcu) at (4.4,6.9) {\textbf{Control de combustible}\\gobernador de $N_g$ (PI)\\l\'imites $w_f/p_3$ e ITT};
+  \node[ctl] (gov) at (8.8,-1.6) {\textbf{Gobernador de h\'elice}\\$\dot\beta=K_b\,e_{N_2}+K_d\,\dot N_2$};
+  \node[ctl] (pil) at (4.4,-1.6) {\textbf{Piloto} (palanca)\\$\dot N_{g,ref}\propto Q^{*}-Q$};
+  % flujos
+  \draw[sig, frio] (atm) -- node[above, tag] {$T_2,p_2$} (cmp);
+  \draw[sig, frio] (cmp) -- node[above, tag] {$\dot m_c,\,T_3$} (cc);
+  \draw[sig, caliente] (cc) -- node[above, tag] {$p_4,\,T_4$} (tc);
+  \draw[sig, caliente] (tc) -- node[right, tag] {$p_{45},\,T_{45}$ (ITT)} (tp);
+  \draw[sig, pt] (tp) -- node[above, tag] {$P_{TP}$} (ept);
+  \draw[sig, helice!60!black, {Stealth[length=2.2mm]}-{Stealth[length=2.2mm]}] (hel) -- node[above, tag] {$Q\;\leftrightarrows\;\Omega=\omega_p/15.07$} (ept);
+  \draw[sig, gg] (tc) -- node[right, tag] {$P_{TC}$} (egg);
+  \draw[sig, gg] (egg.west) -- (6.6,6.9) -- (6.6,5.35) -- (5.2,5.35) node[above, tag] {$\omega_g$} -- (5.2,4.7);
+  \draw[sig, caliente] (fcu.south east) -- node[pos=0.5, above right, tag] {$w_f$} ($(cc.north)+(-0.6,0)$) ;
+  \draw[sig, frio] (atm.south) -- node[pos=0.5, left, tag] {$\rho,\mu,V$} (0,1.2) -- (hel.west);
+  % control
+  \draw[sigc] (egg.north) -- ++(0,0.5) -| node[pos=0.25, above, tag] {$N_g$} (fcu.north);
+  \draw[sigc] (ept.south) -- (gov.north) node[midway, right, tag] {$N_2$};
+  \draw[sigc] (gov.west) -- (6.85,-1.6) -- (6.85,0.3) node[left, tag] {$\beta$} -- ($(hel.east)+(0,-0.5)$);
+  \draw[sigc] (hel.south) -- node[right, tag] {$Q$} (pil.north);
+  \draw[sigc] (pil.west) -- (-2.4,-1.6) |- node[pos=0.25, left, tag] {$N_{g,ref}$} (fcu.west);
+  % leyenda
+  \node[draw=tinta, line width=1.6pt, fill=frio!8, minimum width=6mm, minimum height=4mm] (l1) at (-1.6,-3.3) {};
+  \node[right=1mm of l1, font=\scriptsize, anchor=west] {EDO en el tiempo (LSODA): $\omega_g,\omega_p,p_{cc},T_{cc},w_f,I,\beta,N_{g,ref}$};
+  \node[draw=tinta, line width=0.9pt, minimum width=6mm, minimum height=4mm] (l2) at (-1.6,-3.9) {};
+  \node[right=1mm of l2, font=\scriptsize, anchor=west] {cuasi-est\'atico (CoolProp / Cantera)};
+  \node[draw=tinta, dashed, fill=helice!10, minimum width=6mm, minimum height=4mm] (l3) at (-1.6,-4.5) {};
+  \node[right=1mm of l3, font=\scriptsize, anchor=west] {control};
+\end{tikzpicture}
+\end{document}

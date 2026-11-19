@@ -1,0 +1,43 @@
+% NB14a -- Elemento de pala de la helice segun Traub (2016): angulo de flujo libre alpha_inf, angulo inducido
+% alpha_i (cerrado de forma algebraica, sin iteracion) y angulo de ataque alpha = beta - alpha_i - alpha_inf.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,angles,quotes}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{abs}{HTML}{2A78D6}
+\definecolor{rel}{HTML}{E34948}
+\definecolor{fuerza}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm, vec2/.style={-{Stealth[length=2.6mm]}, line width=1.3pt}, tag/.style={font=\small}]
+  \coordinate (O) at (0,0);
+  % plano de rotacion horizontal (direccion de giro hacia la izquierda), eje de vuelo hacia arriba
+  \draw[tinta!40, dashed] (-7.2,0) -- (1.2,0) node[right, tag] {plano de giro};
+  \draw[tinta!40, dashed] (0,-0.6) -- (0,3.8) node[above, tag] {eje (vuelo)};
+  % velocidades vistas por la pala: Omega r hacia la derecha (aire entra), V hacia abajo (flujo axial)
+  \coordinate (A) at (-6.4,2.6);     % origen del vector W
+  \draw[vec2, abs] (A) -- ++(6.4,0) node[pos=0.5, above, tag] {$\Omega r$};
+  \draw[vec2, abs] (-6.4,2.6) -- (-6.4,0.0) node[pos=0.5, left, tag] {$V_\infty$};
+  \draw[vec2, rel] (A) -- (O) node[pos=0.22, above right=1pt, tag] {$W_\infty$};
+  % W efectiva girada por alpha_i
+  \draw[vec2, rel!60!black] (A) -- (0.25,-0.55) node[pos=0.97, below left, tag] {$W$};
+  % perfil (cuerda) con angulo beta respecto al plano de giro
+  \begin{scope}[shift={(-3.0,1.2)}, rotate=-38]
+    \fill[metal!70] (-1.6,0) .. controls (-1.0,0.35) and (0.8,0.28) .. (1.8,0) .. controls (0.8,-0.08) and (-1.0,-0.12) .. (-1.6,0);
+    \draw[tinta, line width=0.8pt] (-1.6,0) .. controls (-1.0,0.35) and (0.8,0.28) .. (1.8,0) .. controls (0.8,-0.08) and (-1.0,-0.12) .. (-1.6,0);
+    \draw[tinta, densely dashed] (-2.4,0) -- (2.6,0) node[right, tag, rotate=-38] {cuerda};
+  \end{scope}
+  \node[tag, text width=8.6cm, anchor=north west] at (-7.2,-1.0) {
+  $\alpha_\infty=\arctan\dfrac{V_\infty}{\Omega r}$,\qquad $\alpha=\beta-\alpha_i-\alpha_\infty$\\[3pt]
+  Traub: $A\,\alpha_i^2+B\,\alpha_i+C=0$ con $A=F\tfrac{\pi}{2}\cos\alpha_\infty$,\\
+  $B=\dfrac{N_b c\,C_{l\alpha}}{16 r}+F\tfrac{\pi}{2}\sin\alpha_\infty$, $C=-\dfrac{N_b c\,C_{l\alpha}}{16 r}(\beta-\alpha_\infty-\alpha_{0L})$\\[3pt]
+  $dT=\tfrac12\rho W^2 N_b c\,(C_l\cos\phi-C_d\sin\phi)\,dr$,\quad $dQ=\tfrac12\rho W^2 N_b c\,(C_l\sin\phi+C_d\cos\phi)\,r\,dr$,\\
+  $\phi=\alpha_i+\alpha_\infty$, $W=\Omega r\cos\alpha_i/\cos\alpha_\infty$};
+  % angulos
+  \coordinate (Hz) at (-6.4,2.6); \coordinate (R1) at (1,2.6);
+  \pic[draw, abs, angle radius=16mm, "$\alpha_\infty$", angle eccentricity=1.3, font=\small] {angle=O--A--R1};
+  % fuerzas
+  \draw[vec2, fuerza] (-3.0,1.2) -- ++(52:1.6) node[above, tag] {$dL$};
+  \draw[vec2, fuerza!60!black] (-3.0,1.2) -- ++(-38:0.9) node[below right, tag] {$dD$};
+  \node[tag, fuerza!50!black] at (-1.3,3.4) {$dT$ (axial), $dQ/r$ (tangencial)};
+\end{tikzpicture}
+\end{document}

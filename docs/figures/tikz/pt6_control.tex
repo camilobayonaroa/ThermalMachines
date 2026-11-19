@@ -1,0 +1,35 @@
+% NB14a -- Arquitectura de control del turbohelice: palanca de potencia -> control de combustible (gobierna Ng),
+% palanca de condicion -> gobernador de helice (gobierna N2 cambiando el paso). Dos lazos casi desacoplados.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{gg}{HTML}{4A3AA7}
+\definecolor{caliente}{HTML}{E34948}
+\definecolor{pt}{HTML}{EB6834}
+\definecolor{helice}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  b/.style={draw=tinta, line width=0.9pt, rounded corners=2pt, align=center, font=\footnotesize, minimum height=12mm, text width=30mm, fill=white},
+  s/.style={-{Stealth[length=2.2mm]}, line width=1pt},
+  tag/.style={font=\scriptsize\itshape, text=tinta!75}]
+  \node[b, fill=metal!30, text width=24mm] (pla) at (0,3) {\textbf{Palanca de potencia}\\$\Rightarrow N_{g,ref}$};
+  \node[draw, circle, inner sep=1.5pt] (s1) at (2.6,3) {$-$};
+  \node[b, fill=caliente!8] (fcu) at (5.6,3) {\textbf{Control de combustible}\\PI sobre $N_g$};
+  \node[b, fill=caliente!15, text width=34mm] (lim) at (10.0,3) {l\'imites: $R_{dec}\le w_f/p_3\le R_{acc}$\\ITT $\le 800$ $^\circ$C};
+  \node[b, fill=gg!15] (gg) at (14.4,3) {\textbf{Generador de gas}\\c\'amara + TC + compresor};
+  \node[b, fill=metal!30, text width=24mm] (cl) at (0,-0.3) {\textbf{Palanca de condici\'on}\\$\Rightarrow N_{2,ref}$};
+  \node[draw, circle, inner sep=1.5pt] (s2) at (2.6,-0.3) {$-$};
+  \node[b, fill=helice!12] (gov) at (5.6,-0.3) {\textbf{Gobernador}\\(contrapesos + v\'alvula piloto)};
+  \node[b, fill=helice!20, text width=34mm] (pas) at (10.0,-0.3) {paso $\beta$ entre tope bajo\\y bandera (84.5$^\circ$)};
+  \node[b, fill=pt!15] (pt) at (14.4,-0.3) {\textbf{Turbina libre + h\'elice}\\$I\dot\omega_p=P_{TP}-Q\Omega$};
+  \draw[s] (pla) -- (s1); \draw[s] (s1) -- node[above, tag] {$e_{N_g}$} (fcu); \draw[s] (fcu) -- node[above, tag] {$w_f^{*}$} (lim);
+  \draw[s] (lim) -- node[above, tag] {$w_f$} (gg);
+  \draw[s] (gg.north) -- ++(0,0.6) -| node[pos=0.25, above, tag] {$N_g,\;p_3,\;$ITT} (s1.north);
+  \draw[s] (cl) -- (s2); \draw[s] (s2) -- node[above, tag] {$e_{N_2}$} (gov); \draw[s] (gov) -- node[above, tag] {$\dot\beta$} (pas);
+  \draw[s] (pas) -- node[above, tag] {$Q(\beta)$} (pt);
+  \draw[s] (pt.south) -- ++(0,-0.6) -| node[pos=0.25, below, tag] {$N_2$} (s2.south);
+  \draw[s, pt, line width=1.4pt] (gg.south) -- node[right, tag] {gas: $p_{45},\,T_{45}$ $\Rightarrow P_{TP}$} (pt.north);
+  \node[tag, text width=15cm, anchor=north west] at (-1.2,-2.1) {Acoplamiento: el gas del generador alimenta la turbina libre, pero el \'unico v\'inculo mec\'anico es aerodin\'amico. Subir la palanca de potencia aumenta $N_g$ y $P_{TP}$; el gobernador responde aumentando el paso para que $N_2$ no cambie, y el par $Q$ es lo que el piloto lee en cabina.};
+\end{tikzpicture}
+\end{document}
