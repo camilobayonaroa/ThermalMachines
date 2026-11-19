@@ -1,0 +1,69 @@
+% NB10c -- Lazo vectorial del mecanismo biela-manivela (con descentrado e).
+% Reemplaza el esquema vectorial dibujado a mano del informe de Alarcon & Chilatra (2025, Fig. 1),
+% particularizado al motor de un solo lazo: O-C (manivela r), C-D (biela l), D sobre la guia x = e.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,patterns,angles,quotes}
+\begin{document}
+\input{_estilo.tex}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % geometria (escala de dibujo): r = 1.6, l = 5.2, e = 0.35, theta = 55 deg desde el eje y
+  \def\r{1.6}\def\l{5.2}\def\e{0.35}\def\th{55}
+  \coordinate (O) at (0,0);
+  \coordinate (C) at ({-\r*sin(\th)},{\r*cos(\th)});
+  % D: x = e, y = yC + sqrt(l^2 - (e - xC)^2)
+  \pgfmathsetmacro{\xC}{-\r*sin(\th)}\pgfmathsetmacro{\yC}{\r*cos(\th)}
+  \pgfmathsetmacro{\yD}{\yC + sqrt(\l*\l - (\e-\xC)*(\e-\xC))}
+  \coordinate (D) at (\e,\yD);
+  % cilindro
+  \fill[metal!35] (\e-1.25,\yD-0.2) rectangle (\e+1.25,\yD+2.3);
+  \draw[tinta, line width=1.1pt] (\e-1.25,\yD-1.6) -- (\e-1.25,\yD+2.3) -- (\e+1.25,\yD+2.3) -- (\e+1.25,\yD-1.6);
+  \fill[perdida!18] (\e-1.2,\yD+0.55) rectangle (\e+1.2,\yD+2.25);
+  \node[lbl, perdida, font=\footnotesize] at (\e+0.62,\yD+1.0) {$p(t)$, $V(\theta)$};
+  % piston
+  \fill[metal] (\e-1.2,\yD-0.45) rectangle (\e+1.2,\yD+0.55); \draw[tinta] (\e-1.2,\yD-0.45) rectangle (\e+1.2,\yD+0.55);
+  % culata
+  \draw[tinta, line width=1.6pt] (\e-1.45,\yD+2.3) -- (\e+1.45,\yD+2.3);
+  \node[lbl, left] at (\e-1.45,\yD+2.3) {culata};
+  % inyector
+  \fill[tinta] (\e-0.08,\yD+2.3) rectangle (\e+0.08,\yD+2.75);
+  \draw[superior, line width=0.8pt] (\e,\yD+2.25) -- ++(-0.45,-0.55) (\e,\yD+2.25) -- ++(0.45,-0.55);
+  \node[lbl, right, font=\footnotesize] at (\e+0.1,\yD+2.65) {inyector};
+  % eje de la guia y eje vertical por O
+  \draw[tinta, dashed, line width=0.4pt] (\e,-0.4) -- (\e,\yD+2.9);
+  \draw[tinta, dashed, line width=0.4pt] (0,-1.9) -- (0,1.9);
+  % circulo de la manivela
+  \draw[manivela!40, line width=0.5pt, dashed] (O) circle (\r);
+  % eslabones
+  \draw[barra, manivela] (O) -- (C);
+  \draw[barra, superior] (C) -- (D);
+  \node[fijo] at (O) {}; \node[pin] at (C) {}; \node[pin] at (D) {};
+  \fill[pattern=north east lines, pattern color=tinta] (-0.35,-0.25) rectangle (0.35,-0.5);
+  \draw[tinta, line width=0.8pt] (-0.35,-0.25) -- (0.35,-0.25);
+  \node[lbl, below left] at (O) {$O$};
+  \node[lbl, left=4pt] at (C) {$C$};
+  \node[lbl, right=6pt] at (D) {$D$ (bul\'on)};
+  % vectores
+  \draw[vec, manivela] (O) -- ($(O)!0.93!(C)$) node[lbl, midway, below left, manivela] {$\vec r$};
+  \draw[vec, superior] (C) -- ($(C)!0.96!(D)$) node[lbl, pos=0.45, left=2pt, superior] {$\vec l$};
+  % angulos
+  \coordinate (Oup) at (0,1);
+  \pic[draw, tinta, <-, angle radius=0.75cm, "$\theta$", angle eccentricity=1.4] {angle = Oup--O--C};
+  \coordinate (Cup) at ($(C)+(0,1)$);
+  \pic[draw, superior, ->, angle radius=1.3cm, "$\beta$", angle eccentricity=1.25] {angle = D--C--Cup};
+  % cota de e
+  \draw[cota] (0,-2.3) -- (\e,-2.3) node[lbl, midway, below] {$e$};
+  % cota de y_D
+  \draw[cota] (\e+2.1,0) -- (\e+2.1,\yD) node[lbl, midway, right] {$y_D(\theta)$};
+  \draw[tinta, line width=0.3pt] (0.2,0) -- (\e+2.3,0);
+  % ecuaciones
+  \node[lbl, align=left, anchor=north west, font=\small] at (3.9,4.6) {%
+    Lazo: $\vec r + \vec l = e\,\hat\imath + y_D\,\hat\jmath$\\[3pt]
+    $x:\; -r\sin\theta + l\sin\beta = e$\\
+    $y:\; \phantom{-}r\cos\theta + l\cos\beta = y_D$\\[4pt]
+    $\sin\beta = \dfrac{e + r\sin\theta}{l}$,\quad $\lambda = r/l$\\[4pt]
+    $V(\theta) = V_c + A_p\,[\,y_{PMS} - y_D(\theta)\,]$\\[3pt]
+    $\dot y_D,\ \ddot y_D$: m\'etodo del jacobiano\\
+    (1 lazo, 2 inc\'ognitas: $\beta$, $y_D$)};
+\end{tikzpicture}
+\end{document}

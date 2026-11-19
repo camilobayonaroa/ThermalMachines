@@ -1,0 +1,62 @@
+% NB10c -- Modelo conceptual del chorro diesel de inyeccion directa (en la linea de Dec, 1997) y su
+% abstraccion 0D de dos zonas (zona de chorro / mezcla + zona de aire) usada en el cuadernillo.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,decorations.pathmorphing,shapes.geometric}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{liquido}{HTML}{2A78D6}
+\definecolor{rico}{HTML}{EB6834}
+\definecolor{hollin}{HTML}{3A3A38}
+\definecolor{llama}{HTML}{E34948}
+\definecolor{aire}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % ---------------- (a) chorro real ----------------
+  \node[lbl, font=\bfseries, anchor=west] at (-0.6,2.9) {(a) Chorro diesel en combusti\'on cuasi-estacionaria};
+  % inyector
+  \fill[tinta] (-0.6,-0.25) rectangle (0,0.25);
+  % envolvente de la llama de difusion
+  \fill[llama!12] (0.9,0) .. controls (1.2,1.4) and (5.5,1.9) .. (8.2,1.2) .. controls (9.0,0.8) and (9.0,-0.8) .. (8.2,-1.2)
+      .. controls (5.5,-1.9) and (1.2,-1.4) .. (0.9,0) -- cycle;
+  \draw[llama, line width=2pt] (2.2,0.75) .. controls (4,1.55) and (6.5,1.65) .. (8.2,1.2) .. controls (9.0,0.8) and (9.0,-0.8) .. (8.2,-1.2)
+      .. controls (6.5,-1.65) and (4,-1.55) .. (2.2,-0.75);
+  % zona rica premezclada (bolsa de hollin)
+  \fill[rico!45] (2.2,0) .. controls (2.6,0.75) and (4.0,0.9) .. (5.0,0.8) .. controls (5.6,0.5) and (5.6,-0.5) .. (5.0,-0.8)
+      .. controls (4.0,-0.9) and (2.6,-0.75) .. (2.2,0) -- cycle;
+  \fill[hollin!55] (5.0,0) .. controls (5.3,1.1) and (7.6,1.15) .. (8.1,0.6) .. controls (8.4,0.2) and (8.4,-0.2) .. (8.1,-0.6)
+      .. controls (7.6,-1.15) and (5.3,-1.1) .. (5.0,0) -- cycle;
+  % liquido
+  \fill[liquido!70] (0,0.08) -- (1.9,0.28) -- (2.1,0) -- (1.9,-0.28) -- (0,-0.08) -- cycle;
+  % chorro de vapor (frontera de mezcla)
+  \draw[tinta, dashed, line width=0.6pt] (0,0.1) -- (2.2,0.75); \draw[tinta, dashed, line width=0.6pt] (0,-0.1) -- (2.2,-0.75);
+  % aire arrastrado
+  \foreach \x in {0.7,1.4,2.1} {\draw[-{Stealth[length=2.2mm]}, aire, line width=1pt] (\x,1.65) -- (\x+0.25,0.55);
+                                 \draw[-{Stealth[length=2.2mm]}, aire, line width=1pt] (\x,-1.65) -- (\x+0.25,-0.55);}
+  \node[lbl, aire, font=\footnotesize] at (1.4,2.0) {aire caliente arrastrado};
+  % cotas
+  \draw[cota] (0,-2.2) -- (1.95,-2.2) node[lbl, midway, below, font=\footnotesize] {$L_{liq}$};
+  \draw[cota] (0,-2.85) -- (2.2,-2.85) node[lbl, midway, below, font=\footnotesize] {$H$ (lift-off)};
+  \draw[cota] (0,-3.5) -- (8.75,-3.5) node[lbl, midway, below, font=\footnotesize] {$S(t)$: penetraci\'on};
+  % etiquetas
+  \node[lbl, font=\footnotesize, align=center] at (3.7,0) {premezcla rica\\$\phi\approx 2$-$4$};
+  \node[lbl, font=\footnotesize, align=center, text=white] at (6.8,0) {formaci\'on\\de holl\'in};
+  \node[lbl, font=\footnotesize, align=center, llama] at (6.2,2.15) {llama de difusi\'on ($\phi=1$, $T\approx2700$ K):\\oxida holl\'in; NO t\'ermico por fuera};
+  \draw[liquido, line width=0.5pt] (1.0,0.05) -- (-0.4,0.75); \node[lbl, font=\footnotesize, liquido, above] at (-0.4,0.75) {l\'iquido};
+  % ---------------- (b) abstraccion 0D ----------------
+  \begin{scope}[shift={(11.2,-0.6)}]
+    \node[lbl, font=\bfseries, anchor=west] at (-0.3,3.5) {(b) Abstracci\'on 0D de dos zonas};
+    \draw[tinta, line width=1.2pt] (0,-1.6) -- (0,2.8) -- (5.2,2.8) -- (5.2,-1.6);
+    \fill[aire!12] (0.05,-1.0) rectangle (5.15,2.75);
+    \fill[metal] (0.05,-1.6) rectangle (5.15,-1.0); \draw[tinta] (0.05,-1.6) rectangle (5.15,-1.0);
+    \node[draw=llama, fill=rico!30, line width=1.2pt, ellipse, minimum width=2.4cm, minimum height=1.6cm, align=center, font=\footnotesize] (S) at (2.0,1.1) {zona de\\chorro ``$s$''\\$\phi_s(t)$};
+    \node[lbl, font=\footnotesize, align=center] at (4.15,0.0) {zona de\\aire ``$a$''};
+    \draw[-{Stealth[length=3mm]}, superior, line width=1.6pt] (2.0,3.3) -- (2.0,1.95) node[lbl, pos=0.25, right, superior] {$\dot m_f(t)$};
+    \draw[-{Stealth[length=3mm]}, aire, line width=1.6pt] (4.6,1.9) -- (3.2,1.4) node[lbl, pos=0.25, above, aire] {$\dot m_{arr}(t)$};
+    \node[lbl, align=left, anchor=north west, font=\footnotesize] at (-0.3,-1.9) {%
+      $\bullet$ misma $p(t)$ en ambas zonas (pared m\'ovil $u$-$s$)\\
+      $\bullet$ $\dot m_{arr}$ de la teor\'ia de chorro (conservaci\'on\\ \phantom{$\bullet$} de cantidad de movimiento, Naber-Siebers)\\
+      $\bullet$ qu\'imica detallada (n-dodecano, 53 esp.)\\ \phantom{$\bullet$} integrada en el TIEMPO en la zona $s$\\
+      $\bullet$ retardo, premezcla y difusi\'on \emph{emergen}:\\ \phantom{$\bullet$} no se imponen con una ley de Wiebe};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

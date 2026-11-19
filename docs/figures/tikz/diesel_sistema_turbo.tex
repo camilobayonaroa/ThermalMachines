@@ -1,0 +1,71 @@
+% NB10c -- Sistema motor diesel + turbocompresor + intercooler aire-aire, con estados numerados.
+% Reemplaza DIAGRAMA.png de la entrega MotorDieselIntercooler (Munoz & Pedraza) y lo extiende con la turbina
+% (cierre del balance del turbocompresor) y los estados del ciclo en el cilindro.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,positioning,decorations.pathmorphing}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{frio}{HTML}{2A78D6}
+\definecolor{caliente}{HTML}{E34948}
+\definecolor{tibio}{HTML}{EB6834}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  flujo/.style={-{Stealth[length=3mm]}, line width=2.2pt},
+  est/.style={circle, draw=tinta, fill=white, line width=0.8pt, inner sep=1.2pt, font=\footnotesize\bfseries},
+  caja/.style={draw=tinta, line width=1pt, rounded corners=2pt, align=center, font=\small}]
+  % compresor (trapecio) y turbina
+  \draw[caja, fill=frio!15] (0,0) -- (1.6,0.5) -- (1.6,2.5) -- (0,3.0) -- cycle;
+  \node[lbl, align=center] at (0.8,1.5) {C};
+  \node[lbl, below, align=center, font=\footnotesize] at (0.8,-0.05) {compresor\\centr\'ifugo};
+  \draw[caja, fill=caliente!15] (3.6,0.5) -- (5.2,0) -- (5.2,3.0) -- (3.6,2.5) -- cycle;
+  \node[lbl] at (4.4,1.5) {T};
+  \node[lbl, below, align=center, font=\footnotesize] at (4.4,-0.05) {turbina\\de escape};
+  \draw[tinta, line width=2.5pt] (1.6,1.5) -- (3.6,1.5);
+  \node[lbl, above, font=\footnotesize] at (2.6,1.55) {eje: $\dot W_T\,\eta_m=\dot W_C$};
+  % aire ambiente -> 1
+  \draw[flujo, frio] (-2.0,2.4) -- (0,2.4);
+  \node[est] at (-1.0,2.4) {1}; \node[lbl, above, font=\footnotesize] at (-1.0,2.65) {aire ambiente $p_1,T_1$};
+  % 2 -> intercooler
+  \draw[flujo, tibio] (0.8,3.0) -- (0.8,4.6) -- (3.0,4.6);
+  \node[est] at (0.8,3.8) {2}; \node[lbl, left, font=\footnotesize, align=right] at (0.6,3.8) {$p_2=\Pi_C\,p_1$\\$T_2>T_1$};
+  % intercooler (nucleo de flujo cruzado)
+  \draw[caja, fill=metal!40] (3.0,4.0) rectangle (6.0,5.2);
+  \foreach \x in {3.4,3.8,...,5.8} \draw[metal!80!tinta, line width=0.4pt] (\x,4.0) -- (\x,5.2);
+  \node[lbl, font=\small\bfseries] at (4.5,4.6) {intercooler};
+  \node[lbl, font=\footnotesize, align=center] at (4.5,5.65) {flujo cruzado, $\varepsilon$-NTU};
+  % aire de impacto: atraviesa el nucleo PERPENDICULAR al plano (flujo cruzado)
+  \foreach \x in {3.5,4.5,5.5} {\draw[frio, line width=0.9pt, fill=white] (\x,4.35) circle (0.13); \draw[frio, line width=0.9pt] (\x-0.09,4.26) -- (\x+0.09,4.44) (\x-0.09,4.44) -- (\x+0.09,4.26);}
+  \node[lbl, font=\footnotesize, frio, align=center, anchor=north] at (3.9,3.9) {$\otimes$ aire de impacto ($T_{amb}$, $V_{amb}$)\\cruza el n\'ucleo y sale en 4};
+  % 3 -> multiple de admision
+  \draw[flujo, frio!70!tibio] (6.0,4.6) -- (8.0,4.6);
+  \node[est] at (7.0,4.6) {3}; \node[lbl, above, font=\footnotesize, align=center] at (7.0,4.85) {$p_3=p_2(1-\Delta p_{IC})$\\$T_3<T_2$};
+  % cilindro (motor)
+  \begin{scope}[shift={(9.4,0)}]
+    \draw[tinta, line width=1.2pt] (-1.0,0.6) -- (-1.0,4.2) -- (1.0,4.2) -- (1.0,0.6);
+    \fill[caliente!20] (-0.95,2.3) rectangle (0.95,4.15);
+    \fill[metal] (-0.95,1.6) rectangle (0.95,2.3); \draw[tinta] (-0.95,1.6) rectangle (0.95,2.3);
+    \draw[barra, superior] (0,1.95) -- (-0.4,0.3); \draw[barra, manivela] (-0.4,0.3) -- (0,-0.3);
+    \node[fijo] at (0,-0.3) {};
+    \fill[tinta] (-0.07,4.2) rectangle (0.07,4.65);
+    \draw[superior, line width=0.8pt] (0,4.1) -- ++(-0.35,-0.5) (0,4.1) -- ++(0.35,-0.5);
+    \node[lbl, right, font=\footnotesize] at (0.1,4.75) {inyecci\'on $\dot m_f(\theta)$};
+    \node[lbl, font=\footnotesize, align=center] at (0,3.1) {$p(t),T(t)$\\$Y_k(t)$};
+    \node[lbl, below, font=\footnotesize, align=center] at (0,-0.5) {cilindro: estados\\ 1c$\to$2c$\to$3c$\to$4c};
+    % admision por arriba izquierda, escape arriba derecha
+    \draw[flujo, frio!70!tibio] (-1.4,4.6) -- (-0.5,4.6) -- (-0.5,4.25);
+    \draw[flujo, caliente] (-1.05,3.6) -- (-3.0,3.6) -- (-3.0,2.0) -- (-4.2,2.0);
+    \draw[-{Stealth[length=3mm]}, line width=1.5pt, tinta] (1.2,-0.3) -- (2.6,-0.3) node[lbl, right] {$T_{eje}(\theta),\ \dot W_{freno}$};
+  \end{scope}
+  % escape 5 (dentro del lazo compresor-IC-cilindro-turbina: sin cruces)
+  \node[est] at (7.4,3.6) {5}; \node[lbl, above, font=\footnotesize, align=center] at (7.4,2.55) {};
+  \node[lbl, font=\footnotesize, align=center] at (6.85,2.75) {$p_5,T_5$\\escape};
+  \draw[flujo, caliente!70!tinta] (5.2,0.6) -- (6.8,0.6);
+  \node[est] at (6.2,0.6) {6}; \node[lbl, below, font=\footnotesize] at (6.2,0.35) {a la atm\'osfera};
+  % balance del turbocompresor
+  \node[lbl, align=left, anchor=north west, font=\small] at (-2.2,-1.4) {%
+    $\dot W_C=\dot m_a c_p T_1\big(\Pi_C^{(k-1)/k}-1\big)/\eta_C$ \qquad
+    $\dot W_T=\dot m_{ex} c_{p,ex} T_5\big(1-(p_6/p_5)^{(k_{ex}-1)/k_{ex}}\big)\eta_T$\\[3pt]
+    $\varepsilon=\dfrac{T_2-T_3}{T_2-T_{amb}}$ ($C_{min}$ = aire de carga) \qquad
+    $\rho_3=\dfrac{p_3}{R\,T_3}$ \ $\Rightarrow$ \ $m_{atrapada}\propto\eta_v\,\rho_3\,V_d$};
+\end{tikzpicture}
+\end{document}

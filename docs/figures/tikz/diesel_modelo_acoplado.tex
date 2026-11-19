@@ -1,0 +1,43 @@
+% NB10c -- Arquitectura del modelo integrado: mecanismo 2D cuasi-estatico + termoquimica 0D en el tiempo
+% + turbocompresor/intercooler cuasi-estacionarios. Flechas = informacion que se intercambia.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{mec}{HTML}{2A78D6}
+\definecolor{ter}{HTML}{E34948}
+\definecolor{qui}{HTML}{EB6834}
+\definecolor{adm}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  bloque/.style={draw, line width=1.2pt, rounded corners=4pt, align=left, font=\small, inner sep=6pt, text width=6.6cm},
+  info/.style={-{Stealth[length=3mm]}, line width=1.1pt, tinta},
+  et/.style={font=\footnotesize, text=tinta, fill=white, inner sep=1.5pt, align=center}]
+  \node[bloque, draw=adm, fill=adm!8] (A) at (0,4.6) {%
+    \textbf{Admisi\'on} \hfill {\footnotesize cuasi-estacionario}\\
+    compresor centr\'ifugo $\to$ intercooler $\varepsilon$-NTU\\
+    $\Rightarrow p_3,\ T_3,\ \rho_3$, masa atrapada, $\lambda$};
+  \node[bloque, draw=mec, fill=mec!8] (M) at (-4.6,0) {%
+    \textbf{Mecanismo 2D} \hfill {\footnotesize cuasi-est\'atico}\\
+    lazo vectorial + jacobiano: $y_D,\dot y_D,\ddot y_D$\\
+    $V(\theta),\ \dot V(\theta)$ con $\omega$ = cte.\\[2pt]
+    Newton-Euler: $F_O,F_C,F_D,N,T_O$};
+  \node[bloque, draw=ter, fill=ter!8] (T) at (4.6,0) {%
+    \textbf{Termoqu\'imica 0D} \hfill {\footnotesize EDO en $t$}\\
+    zonas chorro/aire (Cantera ReactorNet)\\
+    $\dot U=-p\dot V-\dot Q_w+\dot H_{f}$;\ \ $\dot Y_k=\dot\omega_k W_k/\rho$\\
+    Woschni, inyecci\'on $\dot m_f(t)$, arrastre $\dot m_{arr}(t)$\\
+    post: NO (Zeldovich ext.), holl\'in (Hiroyasu)};
+  \node[bloque, draw=tinta, fill=metal!25] (E) at (0,-4.4) {%
+    \textbf{Escape y desempe\~no}\\
+    $T_5$, $\dot m_{ex}$ $\to$ turbina $\Rightarrow$ cierra $\dot W_T=\dot W_C$\\
+    IMEP, BMEP (FMEP), par, potencia, BSFC, $C_s$};
+  \draw[info] (M.north east) ++(-0.3,0) to[bend left=15] node[et, pos=0.55] {$V(t),\ \dot V(t)$\\ (tablas, $t=\theta/\omega$)} (T.north west);
+  \draw[info] (T.south west) ++(0.3,0) to[bend left=15] node[et, pos=0.5] {$p(t)\Rightarrow F_{gas}$} (M.south east);
+  \draw[info] (A.south west) to[bend right=10] node[et, pos=0.5] {$p_{adm}$} (M.north);
+  \draw[info] (A.south east) to[bend left=10] node[et, pos=0.5] {$p_3,T_3,\lambda$\\ estado 1c} (T.north);
+  \draw[info] (T.south) to[bend left=10] node[et] {$p,T$ en EVO} (E.north east);
+  \draw[info] (M.south) to[bend right=10] node[et] {$T_O(\theta)$} (E.north west);
+  \draw[info, dashed] (E.east) -- ++(5.6,0) |- node[et, pos=0.25] {$\Pi_C$\\(iteraci\'on\\turbo)} (A.east);
+\end{tikzpicture}
+\end{document}
