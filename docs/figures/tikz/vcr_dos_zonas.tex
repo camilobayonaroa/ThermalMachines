@@ -1,0 +1,31 @@
+% Modelo de dos zonas del motor de encendido por chispa: zona quemada (b), frente de llama, gas final sin quemar (u).
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,decorations.pathmorphing,calc}
+\begin{document}
+\input{_estilo.tex}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % cilindro
+  \draw[tinta, line width=1.4pt] (0,0) -- (0,4) -- (6,4) -- (6,0);
+  \fill[metal] (0.1,-0.8) rectangle (5.9,0); \draw[tinta] (0.1,-0.8) rectangle (5.9,0);
+  \node[lbl] at (3,-0.4) {pist\'on};
+  \draw[-{Stealth}, line width=1.2pt, tinta] (3,-1.6) -- (3,-0.9); \node[lbl, right] at (3.1,-1.3) {$\dot V=-A_p\dot y_D$};
+  % zona quemada
+  \begin{scope} \clip (0,0) rectangle (6,4); \fill[perdida!25] (3,4) circle (2.2);
+    \draw[perdida, line width=1.6pt, decorate, decoration={snake, amplitude=1.2pt, segment length=7pt}] (3,4) circle (2.2); \end{scope}
+    \draw[tinta, line width=1.4pt] (0,4) -- (6,4);
+  \draw[tinta, line width=1pt] (3,4) -- (3,4.5); \node[lbl, above] at (3,4.5) {buj\'ia};
+  \node[lbl, align=center] at (3,3.0) {\textbf{zona quemada $b$}\\ $T_b\approx 2500$--$2900$ K\\ productos};
+  \node[lbl, align=center] at (1.3,0.9) {\textbf{gas final $u$}\\ $T_u\approx 700$--$950$ K};
+  \node[lbl, align=center] at (4.6,0.9) {\textbf{gas final $u$}};
+  \node[lbl, perdida, align=left] at (8.0,3.4) {frente de llama\\ $\dot m_{u\to b}=m\,\dot x_b(t)$};
+  \draw[-{Stealth}, perdida, line width=0.8pt] (6.9,3.3) -- (5.05,2.75);
+  % calor a la pared
+  \foreach \y in {0.8,2.0,3.2} \draw[-{Stealth}, line width=1pt, manivela] (5.8,\y) -- (6.6,\y);
+  \node[lbl, manivela, align=left] at (7.9,0.9) {$\dot Q_w$ (Woschni)\\ $T_{\text{pared}}=450$ K};
+  % condiciones
+  \node[lbl, align=left, font=\small, anchor=north west] at (-0.2,-1.8) {%
+    $p_u=p_b=p$ \;(pared interna con $K\gg1$) \qquad $V_u+V_b=V(t)$\\[2pt]
+    detonaci\'on $\Leftrightarrow$ el gas final se autoenciende ($T_u>1500$ K) antes de $x_b=0.95$};
+\end{tikzpicture}
+\end{document}

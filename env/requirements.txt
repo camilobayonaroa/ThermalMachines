@@ -26,6 +26,8 @@
 
 # Termodinámica (NO viene en Colab: se instala vía bootstrap allí)
 CoolProp==8.0.0
+# Cinética química detallada + termodinámica de mezclas reactivas (NB10b, motor VCR)
+cantera==3.2.0
 
 # Kernel + widgets interactivos
 ipykernel==7.3.0

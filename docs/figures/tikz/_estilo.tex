@@ -1,0 +1,20 @@
+% Estilo comun de los diagramas TikZ del modulo VCR (NB10b) -- paleta del proyecto
+\definecolor{manivela}{HTML}{2A78D6}
+\definecolor{inferior}{HTML}{4A3AA7}
+\definecolor{control}{HTML}{1BAF7A}
+\definecolor{superior}{HTML}{EB6834}
+\definecolor{tinta}{HTML}{3A3A38}
+\definecolor{metal}{HTML}{C3C2B7}
+\definecolor{perdida}{HTML}{E34948}
+\definecolor{fuerza}{HTML}{C0392B}
+\tikzset{
+  barra/.style={line width=3.2pt, line cap=round},
+  pin/.style={circle, fill=white, draw=tinta, line width=0.9pt, inner sep=1.6pt},
+  fijo/.style={circle, fill=tinta, inner sep=2.6pt},
+  vec/.style={-{Stealth[length=2.6mm]}, line width=0.9pt},
+  F/.style={-{Stealth[length=3mm]}, line width=1.2pt, fuerza},
+  cota/.style={{Stealth[length=1.8mm]}-{Stealth[length=1.8mm]}, line width=0.5pt, tinta},
+  lbl/.style={font=\small, text=tinta},
+}
+\newcommand{\tierra}[1]{\fill[pattern=north east lines, pattern color=tinta] ($(#1)+(-5,-3)$) rectangle ($(#1)+(5,-6)$);
+  \draw[tinta, line width=0.8pt] ($(#1)+(-5,-3)$) -- ($(#1)+(5,-3)$);}

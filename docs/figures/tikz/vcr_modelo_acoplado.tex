@@ -1,0 +1,30 @@
+% Arquitectura del modelo integrado del motor VCR (NB10b): que resuelve cada submodelo y como se acoplan.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
+\begin{document}
+\input{_estilo.tex}
+\begin{tikzpicture}[
+  caja/.style={draw=#1, line width=1.1pt, rounded corners=3pt, fill=#1!8, align=center, font=\small, text width=4.3cm, minimum height=1.5cm, inner sep=4pt},
+  flecha/.style={-{Stealth[length=2.6mm]}, line width=1pt, tinta},
+  node distance=0.9cm and 1.3cm]
+  \node[caja=manivela] (cin) {\textbf{Cinem\'atica 2D}\\ lazos + jacobiano\\ $y_D(\theta),\ \dot y_D,\ \ddot y_D$};
+  \node[caja=control, left=of cin] (vcr) {\textbf{Control VCR}\\ $R_{OE}\ \leftrightarrow\ r_c\in[8,14]$\\ (eje excéntrico $E$)};
+  \node[caja=inferior, below=of cin] (vol) {\textbf{Volumen}\\ $V=V_c+A_p(y_{\text{culata}}-y_D)$\\ $\dot V=-A_p\,\dot y_D$};
+  \node[caja=superior, below=of vol] (termo) {\textbf{Termodin\'amica 0D, 2 zonas}\\ 1.\textsuperscript{a} ley en $t$; Woschni\\ $p(t),\,T_u(t),\,T_b(t)$};
+  \node[caja=perdida, right=of termo] (quim) {\textbf{Cin\'etica qu\'imica detallada}\\ Cantera, iso-octano\\ 143 especies / 1178 reacc.\\ autoencendido del gas final};
+  \node[caja=perdida, left=of termo] (wiebe) {\textbf{Llama (chispa)}\\ $\dot x_b(t)$ tipo Wiebe\\ CA50 limitado por\\ detonaci\'on (KLSA)};
+  \node[caja=manivela, below=of termo] (ne) {\textbf{Din\'amica (Newton--Euler)}\\ $\mathbf A(\theta)\mathbf x=\mathbf b$, 14 inc\'ognitas\\ fuerzas en pasadores, $T_O(\theta)$\\ {\footnotesize (con $\vec a_{cm},\alpha_i$ de la cinem\'atica)}};
+  \node[caja=tinta, right=of ne] (des) {\textbf{Desempe\~no}\\ IMEP, FMEP, BMEP\\ par y potencia vs. rpm};
+  \draw[flecha] (vcr) -- (cin);
+  \draw[flecha] (cin) -- (vol);
+  \draw[flecha] (vol) -- node[right, font=\footnotesize] {$V(t),\dot V(t)$} (termo);
+  \draw[flecha] (quim.west) -- node[above, font=\footnotesize] {$\dot\omega_k$} (termo.east);
+  \draw[flecha] (termo.north east) to[bend left=25] node[right, font=\footnotesize] {$p,T_u$} (quim.north);
+  \draw[flecha] (wiebe) -- node[above, font=\footnotesize] {$\dot m_{u\to b}$} (termo);
+  \draw[flecha] (termo) -- node[right, font=\footnotesize] {$F_{gas}=(p-p_c)A_p$} (ne);
+  \draw[flecha] (ne) -- (des);
+  \draw[flecha] (termo.south east) to[bend left=10] (des.north);
+  \node[font=\footnotesize, text=tinta, align=left, anchor=north west] at ([yshift=-0.4cm]wiebe.south west) {cuasi-est\'atico: $\omega$ = cte.\\ (verificado con el volante, \S8)};
+\end{tikzpicture}
+\end{document}

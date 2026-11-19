@@ -1,0 +1,49 @@
+% Reemplaza la Figura 1 (dibujo a mano) del informe de Alarcon & Chilatra (2025).
+% Geometria calibrada contra el Nissan VC-Turbo (CR=10, theta1 = 70 grados despues del PMS); coordenadas en mm.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,patterns,angles,quotes}
+\begin{document}
+\input{_estilo.tex}
+\begin{tikzpicture}[x=0.05cm,y=0.05cm]
+  \coordinate (O) at (0,0);      \coordinate (C) at (-31.3,11.3);
+  \coordinate (A) at (-126.4,-13.6); \coordinate (B) at (1.3,19.8);
+  \coordinate (E) at (-76.6,-79.9);  \coordinate (D) at (41.6,178.9);
+  % cilindro y culata
+  \fill[superior!12] (0,190) rectangle (83.2,218); \node[lbl, font=\footnotesize] at (41.6,204) {gas};
+  \draw[tinta, line width=1.2pt] (0,120) -- (0,218) -- (83.2,218) -- (83.2,120);
+  \node[lbl, anchor=south] at (41.6,219) {culata ($y_{\text{culata}}$ fija)};
+  \fill[metal] (8,168) rectangle (75.2,190); \draw[tinta] (8,168) rectangle (75.2,190);
+  \draw[dash dot, tinta!60] (41.6,110) -- (41.6,225);
+  % trayectoria de la manivela
+  \draw[dashed, manivela!60] (O) circle (33.3);
+  % barras
+  \draw[barra, manivela] (O) -- (C);
+  \draw[barra, inferior] (A) -- (B);
+  \draw[barra, control] (A) -- (E);
+  \draw[barra, superior] (B) -- (D);
+  % apoyos
+  \node[fijo] at (O) {}; \node[fijo] at (E) {};
+  \foreach \p in {C,A,B,D} \node[pin] at (\p) {};
+  \node[lbl, below right] at (O) {$O$ (cig\"ue\~nal)};
+  \node[lbl, below=3pt] at (E) {$E$ (eje de control)};
+  \node[lbl, below left] at (C) {$C$}; \node[lbl, left] at (A) {$A$};
+  \node[lbl, below right] at (B) {$B$}; \node[lbl, right=3pt] at (D) {$D$ (bul\'on)};
+  % nombres de eslabones
+  \node[lbl, manivela, font=\footnotesize] at (-24,-4) {$R_{OC}$};
+  \node[lbl, inferior, font=\footnotesize, rotate=11] at (-72,-12) {eslab\'on inferior $A$--$C$--$B$};
+  \node[lbl, control, font=\footnotesize, rotate=50] at (-88,-36) {$R_{AE}$ (control)};
+  \node[lbl, superior, font=\footnotesize, rotate=76] at (30,80) {$R_{BD}$ (superior)};
+  % cotas
+  \draw[cota] (-150,0) -- node[lbl, left] {$R_{OE}$} (-150,-79.9);
+  \draw[tinta!50, densely dotted] (-152,0) -- (O); \draw[tinta!50, densely dotted] (-152,-79.9) -- (E);
+  \draw[cota] (0,112) -- node[lbl, above] {$x_{\text{cil}}$} (41.6,112); \draw[tinta!50, densely dotted] (0,0) -- (0,112);
+  % angulos
+  \coordinate (Xr) at (45,0); \draw[tinta!50] (O) -- (Xr);
+  \pic[draw, tinta, ->, angle radius=7mm, "$\theta_1$", angle eccentricity=1.5, pic text options={font=\footnotesize, xshift=6pt, yshift=-4pt}] {angle = Xr--O--C};
+  \node[lbl, align=left, anchor=north west, font=\footnotesize] at (60,60) {%
+    $\vec R_{OC}+\vec R_{CA}=\vec R_{OE}+\vec R_{EA}$\\[2pt]
+    $\vec R_{OD}=\vec R_{OC}-R_{CB}\,\hat e(\theta_2)+R_{BD}\,\hat e(\theta_4)$\\[2pt]
+    $x_D = x_{\text{cil}}$ (gu\'ia del pist\'on)};
+\end{tikzpicture}
+\end{document}

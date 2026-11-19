@@ -1,0 +1,63 @@
+% Reemplaza las Figuras 8-12 (DCL dibujados a mano) del informe de Alarcon & Chilatra (2025).
+% Convencion: F_X = fuerza que el cuerpo "aguas arriba" ejerce sobre el "aguas abajo" en el pasador X;
+% el otro cuerpo recibe -F_X (accion-reaccion). 14 incognitas: F_O,F_C,F_A,F_E,F_B,F_D (2 c/u), N, T_O.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,patterns}
+\begin{document}
+\input{_estilo.tex}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % 1 manivela
+  \begin{scope}[shift={(0,0)}]
+    \draw[barra, manivela] (0,0) -- (-1.4,0.5); \node[fijo] at (0,0) {}; \node[pin] at (-1.4,0.5) {};
+    \draw[F] (0,0) -- ++(0.9,0.6) node[lbl, right, fuerza] {$\vec F_O$};
+    \draw[F] (-1.4,0.5) -- ++(0.5,-0.9) node[lbl, below, fuerza] {$-\vec F_C$};
+    \draw[-{Stealth}, line width=1pt, manivela] (0.45,-0.2) arc (-30:200:0.45); \node[lbl, manivela] at (0.2,0.75) {$T_O$};
+    \node[lbl, font=\bfseries] at (-0.5,-1.4) {(1) manivela $OC$};
+    \node[lbl, font=\footnotesize] at (-0.5,-1.8) {cm en $O$ (contrapesada)};
+  \end{scope}
+  % 2 eslabon inferior
+  \begin{scope}[shift={(4.6,0)}]
+    \draw[barra, inferior] (-2.0,-0.5) -- (1.0,0.3);
+    \node[pin] at (-2.0,-0.5) {}; \node[pin] at (0.0,0.033) {}; \node[pin] at (1.0,0.3) {};
+    \node[lbl, left=3pt] at (-2.0,-0.5) {$A$}; \node[lbl, below=3pt] at (0,0.033) {$C$}; \node[lbl, right=3pt] at (1.0,0.3) {$B$};
+    \draw[F] (-2.0,-0.5) -- ++(-0.4,-0.9) node[lbl, below, fuerza] {$\vec F_A$};
+    \draw[F] (0,0.033) -- ++(-0.5,0.9) node[lbl, above, fuerza] {$\vec F_C$};
+    \draw[F] (1.0,0.3) -- ++(0.25,-1.0) node[lbl, below, fuerza] {$-\vec F_B$};
+    \draw[F, tinta] (-0.5,-0.1) -- ++(0,-0.7) node[lbl, below] {$m_L\vec g$};
+    \node[lbl, font=\bfseries] at (-0.5,-2.0) {(2) eslab\'on inferior $A$--$C$--$B$};
+  \end{scope}
+  % 3 eslabon de control
+  \begin{scope}[shift={(8.8,0)}]
+    \draw[barra, control] (-0.7,0.9) -- (0,0); \node[fijo] at (0,0) {}; \node[pin] at (-0.7,0.9) {};
+    \node[lbl, left=3pt] at (-0.7,0.9) {$A$}; \node[lbl, below right] at (0,0) {$E$};
+    \draw[F] (-0.7,0.9) -- ++(0.4,0.9) node[lbl, above, fuerza] {$-\vec F_A$};
+    \draw[F] (0,0) -- ++(0.6,-0.8) node[lbl, below, fuerza] {$\vec F_E$};
+    \node[lbl, font=\bfseries] at (-0.3,-1.4) {(3) control $AE$};
+    \node[lbl, font=\footnotesize, align=center] at (-0.3,-1.85) {$F_{Ey}$ = carga del\\ actuador del eje};
+  \end{scope}
+  % 4 eslabon superior
+  \begin{scope}[shift={(12.0,-0.6)}]
+    \draw[barra, superior] (0,0) -- (0.6,2.4); \node[pin] at (0,0) {}; \node[pin] at (0.6,2.4) {};
+    \node[lbl, left=3pt] at (0,0) {$B$}; \node[lbl, left=3pt] at (0.6,2.4) {$D$};
+    \draw[F] (0,0) -- ++(-0.25,1.0) node[lbl, left, fuerza] {$\vec F_B$};
+    \draw[F] (0.6,2.4) -- ++(-0.25,-1.0) node[lbl, right, fuerza] {$-\vec F_D$};
+    \node[lbl, font=\bfseries] at (0.3,-0.8) {(4) superior $BD$};
+  \end{scope}
+  % 5 piston
+  \begin{scope}[shift={(15.2,0.6)}]
+    \fill[metal] (-0.8,-0.3) rectangle (0.8,0.5); \draw[tinta] (-0.8,-0.3) rectangle (0.8,0.5);
+    \node[pin] at (0,0) {}; \node[lbl, below right] at (0,0) {$D$};
+    \foreach \x in {-0.6,-0.2,0.2,0.6} \draw[F, perdida] (\x,1.2) -- (\x,0.55);
+    \node[lbl, perdida] at (0,1.45) {$F_{gas}=(p-p_{\text{c\'arter}})A_p$};
+    \draw[F] (0,0) -- ++(0.25,1.0) node[lbl, right, fuerza, pos=0.6] {$\vec F_D$};
+    \draw[F] (-1.6,0.1) -- (-0.85,0.1) node[lbl, above, fuerza, pos=0.3] {$N$};
+    \node[lbl, font=\bfseries] at (0,-1.0) {(5) pist\'on};
+    \node[lbl, font=\footnotesize] at (0,-1.4) {$a_x=0$, sin rotaci\'on};
+  \end{scope}
+  \node[lbl, align=center, font=\small] at (7.6,-3.0) {%
+    $\sum\vec F = m(\vec a_{cm}-\vec g)$,\quad $\sum M_{cm}=I\alpha$ \;\; $\Rightarrow$\;\;
+    $4\times3+2=14$ ecuaciones lineales, $\mathbf{A}(\theta)\,\mathbf{x}=\mathbf{b}(\theta,\omega,F_{gas})$,\quad
+    $\mathbf x=[F_O,F_C,F_A,F_E,F_B,F_D,N,T_O]$};
+\end{tikzpicture}
+\end{document}
