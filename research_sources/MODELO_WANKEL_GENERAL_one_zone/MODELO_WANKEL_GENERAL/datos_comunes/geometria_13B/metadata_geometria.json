@@ -1,0 +1,29 @@
+{
+  "firma_geometrica": "71dc951c9f45acd7b2345a66ac5b56c2666b308411a8c33d6594f716928593d4",
+  "modelo_version": "1.0.0",
+  "parametros_firma": {
+    "geometry_model_version": "1.0.0",
+    "e_m": 0.015,
+    "R_m": 0.105,
+    "b_m": 0.08,
+    "CR": 9.4,
+    "N_THETA": 3601,
+    "N_HOUSING": 5400,
+    "N_POS_ENV": 3240,
+    "N_PHI_ROTOR": 3240,
+    "ciclo_eje_deg": 1080.0,
+    "relacion_eje_rotor": 3.0,
+    "tolerancia_contencion_m": 0.00015
+  },
+  "resultados": {
+    "Vd_cm3_por_cara": 654.7152052610355,
+    "Vmin_cm3": 77.94228634059947,
+    "Vmax_cm3": 732.657491601635,
+    "CR_calculada": 9.4,
+    "desplazamiento_2_rotores_cm3": 1309.430410522071,
+    "radio_rotor_min_mm": 75.0,
+    "radio_rotor_max_mm": 105.0,
+    "n_fuera_max": 0,
+    "validacion_ok": true
+  }
+}

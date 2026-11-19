@@ -37,3 +37,8 @@ docs/**/_minted-*/
 # ── Sistema operativo ────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+
+# ── research_sources/MODELO_WANKEL_GENERAL_one_zone: solo código y datos de entrada ──
+research_sources/MODELO_WANKEL_GENERAL_one_zone/MODELO_WANKEL_GENERAL/.venv.zip
+research_sources/MODELO_WANKEL_GENERAL_one_zone/MODELO_WANKEL_GENERAL/resultados/
+research_sources/MODELO_WANKEL_GENERAL_one_zone/MODELO_WANKEL_GENERAL/.vscode/

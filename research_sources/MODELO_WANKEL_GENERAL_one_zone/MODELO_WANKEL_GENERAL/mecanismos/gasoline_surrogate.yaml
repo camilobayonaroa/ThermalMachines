@@ -1,0 +1,101 @@
+description: |-
+  Reduced iso-octane mechanism prepared for the Wankel 13B validation model.
+
+  IMPORTANT:
+  This is NOT the complete Z153 mechanism. It combines the published
+  Z153 high-temperature iso-octane branch (IC8H18 / C8H17 / C8H16)
+  with the standard GRI-Mech 3.0 small-species chemistry distributed
+  with Cantera.
+
+  It is intended to provide a clean, loadable mechanism for initial
+  model validation. For thesis-quality detailed iso-octane chemistry,
+  replace this file later with the complete Z153 or LLNL mechanism.
+
+generator: ChatGPT
+input-files: [gri30.yaml]
+cantera-version: 3.2-compatible
+
+units:
+  length: cm
+  quantity: mol
+  activation-energy: cal/mol
+
+phases:
+- name: gas
+  thermo: ideal-gas
+  elements: [H, O, C, N, Ar]
+  species:
+  - gri30.yaml/species: all
+  - species: [IC8H18, C8H17, C8H16]
+  kinetics: gas
+  reactions:
+  - gri30.yaml/reactions: all
+  - isooctane-reactions: all
+  state:
+    T: 300.0
+    P: 1.01325e+05
+
+species:
+
+- name: IC8H18
+  composition: {C: 8, H: 18}
+  thermo:
+    model: NASA7
+    temperature-ranges: [300.0, 1390.0, 3500.0]
+    data:
+    - [-5.96912082, 0.12087217, -9.61538218e-05, 4.1348929e-08,
+       -7.18982937e-12, -3.02675122e+04, 52.7954202]
+    - [20.6155885, 0.0443694094, -1.35968858e-05, 1.75327621e-09,
+       -6.83090867e-14, -3.76580614e+04, -84.2148794]
+
+- name: C8H17
+  composition: {C: 8, H: 17}
+  thermo:
+    model: NASA7
+    temperature-ranges: [300.0, 1530.0, 3500.0]
+    data:
+    - [-3.32961207, 0.108192845, -8.23053436e-05, 3.33403496e-08,
+       -5.36943681e-12, -8906.25182, 41.669727]
+    - [26.510423, 0.0301796816, -5.82184988e-06, 1.42085775e-11,
+       7.60110768e-14, -1.80373025e+04, -114.981197]
+
+- name: C8H16
+  composition: {C: 8, H: 16}
+  thermo:
+    model: NASA7
+    temperature-ranges: [300.0, 1400.0, 3500.0]
+    data:
+    - [-5.35586582, 0.110622059, -8.6952173e-05, 3.69705048e-08,
+       -6.36990286e-12, -1.56875145e+04, 51.1323812]
+    - [18.8616063, 0.0414292819, -1.28170543e-05, 1.66806735e-09,
+       -6.58961701e-14, -2.24684067e+04, -73.8514297]
+
+isooctane-reactions:
+
+# Z153 reaction 37
+- equation: IC8H18 + O2 => C8H17 + HO2
+  rate-constant: {A: 2.0e+15, b: 0.0, Ea: 5.015e+04}
+
+# Z153 reaction 38
+- equation: IC8H18 + OH => C8H17 + H2O
+  rate-constant: {A: 3.0e+07, b: 1.85, Ea: 58.5}
+
+# Z153 reaction 39
+- equation: IC8H18 + H => C8H17 + H2
+  rate-constant: {A: 2.0e+08, b: 2.0, Ea: 2500.0}
+
+# Z153 reaction 40
+- equation: IC8H18 + HO2 => C8H17 + H2O2
+  rate-constant: {A: 2.12e+14, b: 0.0, Ea: 1.769e+04}
+
+# Z153 reaction 46
+- equation: C8H17 + O2 => C8H16 + HO2
+  rate-constant: {A: 3.16e+11, b: 0.0, Ea: 6000.0}
+
+# Z153 reaction 47
+- equation: C8H16 + O2 => 3 C2H4 + 2 CH2O
+  rate-constant: {A: 3.16e+13, b: 0.0, Ea: 1.0e+04}
+
+# Z153 reaction 48
+- equation: C8H17 => 3 C2H4 + C2H5
+  rate-constant: {A: 4.0e+13, b: 0.0, Ea: 2.881e+04}
