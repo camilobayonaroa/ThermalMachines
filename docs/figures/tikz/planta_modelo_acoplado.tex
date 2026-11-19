@@ -1,0 +1,61 @@
+% NB15b -- Arquitectura del modelo acoplado de la planta: bloques cuasi-estaticos (turbomaquinas, combustion 0D)
+% y bloques con EDO en el tiempo (metal de HRSG/hogar, domo Astrom-Bell, condensador, rotores + red, controles).
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,positioning,fit,backgrounds}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{frio}{HTML}{2A78D6}
+\definecolor{vapor}{HTML}{4A3AA7}
+\definecolor{caliente}{HTML}{E34948}
+\definecolor{tibio}{HTML}{EB6834}
+\definecolor{red}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm, node distance=6mm and 9mm,
+  est/.style={draw=tinta, line width=0.9pt, rounded corners=2pt, align=center, font=\footnotesize, minimum height=13mm, text width=33mm, fill=white},
+  ode/.style={est, line width=1.6pt, fill=frio!8},
+  ctl/.style={est, dashed, fill=red!10},
+  sig/.style={-{Stealth[length=2.2mm]}, line width=1pt, tinta},
+  sigc/.style={-{Stealth[length=2.2mm]}, line width=0.9pt, red!60!black, dashed},
+  tag/.style={font=\scriptsize\itshape, text=tinta!70}]
+  \node[est, fill=caliente!8] (tg) at (0,4) {\textbf{Turbina de gas}\\Euler por etapa; carga\\parcial: IGV / TIT};
+  \node[est, fill=tibio!10] (bio) at (0,1.6) {\textbf{Hogar de biomasa}\\cin\'etica EFB/PMF (NB08b)\\$\dot Q=\dot m_b\,\mathrm{PCI}\,\eta_c$};
+  \node[ode] (hrsg) at (4.6,4) {\textbf{HRSG / hogar}\\gas: $\varepsilon$-NTU por haz\\metal: $C_m\dot T_m=\dot Q_g-\dot Q_w$};
+  \node[ode] (drum) at (9.2,4) {\textbf{Domo} (\AA str\"om--Bell)\\$p,\;V_{wt},\;\alpha_r,\;V_{sd}$\\$\Rightarrow$ nivel $\ell(t)$};
+  \node[ode] (sh) at (13.8,4) {\textbf{Sobrecalentador}\\$C_{sh}\dot T_{sh}=\dot Q_{sh}-q_s\Delta h$};
+  \node[est, fill=vapor!10] (tv) at (13.8,1.6) {\textbf{V\'alvula + TV}\\cono de Stodola\\Euler por etapa};
+  \node[ode] (cond) at (13.8,-0.8) {\textbf{Condensador}\\EDO: $T_w,\;\bar T_{cw}$\\$p_c$ cuasi-est\'atico};
+  \node[est, fill=frio!10] (pump) at (9.2,-0.8) {\textbf{Bomba}\\$H(Q,N)$: Euler + desliz.\\punto de operaci\'on};
+  \node[ode, fill=red!12, text width=40mm] (grid) at (4.6,-3.4) {\textbf{Rotores + red}\\$\frac{2H}{f_0}\frac{df}{dt}=\frac{P_{m}-P_d-D\,\Delta f}{S_b}$};
+  \node[est, fill=red!5] (dem) at (4.6,-6.0) {\textbf{Demanda} $P_d(t)$: perfil\\diario, rampa, disparo\\de otra unidad};
+  \node[ctl] (gov) at (2.3,6.6) {gobernador TG\\estatismo $R$ + AGC};
+  \node[ctl] (lvl) at (9.2,6.6) {nivel: 3 elementos\\$(\ell,\,q_s,\,q_f)\to q_f^{ref}$};
+  \node[ctl] (coord) at (13.8,6.6) {modos de la TV: presi\'on\\deslizante, reserva,\\caldera / turbina sigue};
+  % flujos fisicos
+  \draw[sig, caliente] (tg) -- node[above, tag] {$\dot m_8,\,T_8$} (hrsg);
+  \draw[sig, tibio, dashed] (bio.east) -| node[pos=0.25, below, tag] {config. B} ($(hrsg.south)+(-0.5,0)$);
+  \draw[sig, vapor] (hrsg) -- node[above, tag] {$\dot Q_{ev}$} (drum);
+  \draw[sig, vapor] (drum) -- node[above, tag] {$q_s$} (sh);
+  \draw[sig, vapor] (sh) -- node[right, tag] {$p_3,\,T_3$} (tv);
+  \draw[sig, vapor] (tv) -- node[right, tag] {$q_s,\,h_4$} (cond);
+  \draw[sig, frio] (cond) -- node[above, tag] {$\dot m_{cd}$} (pump);
+  \draw[sig, frio] (pump) -- node[right, tag] {$q_f$ (ECO)} (drum);
+  % potencia mecanica y red
+  \draw[sig, red!60!black] (tv.west) -- (11.4,1.6) |- node[pos=0.75, above, tag] {$P_{m,TV}$} ($(grid.east)+(0,0.2)$);
+  \draw[sig, red!60!black] (tg.west) -- (-2.3,4) |- node[pos=0.8, above, tag] {$P_{m,TG}$} ($(grid.west)+(0,0.2)$);
+  \draw[sig, red!60!black] (dem) -- node[right, tag] {$P_d(t)$} (grid);
+  % control
+  \draw[sigc] (grid.north) -- (4.6,-1.8) -| node[pos=0.62, right, tag] {$f(t)$} (gov.south);
+  \draw[sigc] (gov.west) -| (tg.north);
+  \draw[sigc] (lvl) -- (drum);
+  \draw[sigc] (coord) -- (sh);
+  \draw[sigc] (coord.east) -- (16.3,6.6) |- (tv.east);
+  \draw[sigc] (4.6,-1.8) -- (11.0,-1.8) |- node[pos=0.45, left, tag] {$f,\,P_d$} (coord.west);
+  % leyenda
+  \node[draw=tinta, line width=1.6pt, fill=frio!8, minimum width=6mm, minimum height=4mm] (l1) at (-1.6,-7.9) {};
+  \node[right=1mm of l1, font=\scriptsize, anchor=west] {EDO en el tiempo (solve\_ivp, LSODA)};
+  \node[draw=tinta, line width=0.9pt, minimum width=6mm, minimum height=4mm] (l2) at (4.4,-7.9) {};
+  \node[right=1mm of l2, font=\scriptsize, anchor=west] {cuasi-est\'atico (CoolProp / Cantera)};
+  \node[draw=tinta, dashed, fill=red!10, minimum width=6mm, minimum height=4mm] (l3) at (10.4,-7.9) {};
+  \node[right=1mm of l3, font=\scriptsize, anchor=west] {control (PI con antiwindup)};
+\end{tikzpicture}
+\end{document}

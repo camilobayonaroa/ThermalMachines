@@ -1,0 +1,75 @@
+% NB15b -- Bomba centrifuga de alimentacion: rodete con alabes curvados hacia atras, triangulos de velocidad
+% de entrada (r1, sin prerrotacion) y salida (r2, con deslizamiento sigma) y curvas H-Q (Euler -> real) vs. sistema.
+% Reemplaza la imagen web "Euler's turbomachine equation" de la entrega PlantaTermoelectrica (Sanchez, Aparicio, Roa).
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{cabs}{HTML}{E34948}
+\definecolor{wrel}{HTML}{2A78D6}
+\definecolor{uvel}{HTML}{1BAF7A}
+\definecolor{sist}{HTML}{4A3AA7}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  V/.style={-{Stealth[length=2.4mm]}, line width=1.2pt, cabs},
+  W/.style={-{Stealth[length=2.4mm]}, line width=1.2pt, wrel},
+  U/.style={-{Stealth[length=2.4mm]}, line width=1.2pt, uvel}]
+  % ================= rodete =================
+  \node[lbl, font=\small\bfseries, anchor=west] at (-3.6,4.4) {(a) Rodete: el \'alabe obliga al fluido a girar con \'el};
+  \fill[metal!25] (0,0) circle (3);
+  \draw[tinta, line width=1pt] (0,0) circle (3);
+  \draw[tinta, line width=0.8pt, fill=white] (0,0) circle (1);
+  \fill[tinta] (0,0) circle (0.25);
+  \node[lbl, font=\scriptsize] at (0,-0.55) {ojo};
+  % alabes: espiral logaritmica curvada hacia atras (beta2 = 25 deg), rotacion antihoraria
+  \foreach \k in {0,...,6} {
+    \pgfmathsetmacro{\th}{225+\k*360/7}
+    \draw[tinta, line width=2.2pt, line cap=round, domain=1:3, samples=30, variable=\r]
+      plot ({\r*cos(\th - deg(ln(\r)/tan(25)))}, {\r*sin(\th - deg(ln(\r)/tan(25)))});
+  }
+  % rotacion
+  \draw[-{Stealth[length=2.6mm]}, sist, line width=1.2pt] (2.0,-2.85) arc (-55:-20:3.45);
+  \node[sist, font=\small] at (3.35,-1.9) {$\omega$};
+  \draw[cota] (0,0) -- (-3,0); \node[lbl, font=\scriptsize, fill=metal!25, inner sep=1pt] at (-2.0,0.18) {$r_2$};
+  \draw[cota] (0,0) -- (0.71,-0.71); \node[lbl, font=\scriptsize] at (0.65,-0.25) {$r_1$};
+  % triangulo de salida en P=(0,3) (punta del alabe con th=225-deg(ln3/tan25)=90 deg)
+  \coordinate (P) at (0,3);
+  \draw[U] (P) -- ++(-2.0,0) node[pos=0.6, below, font=\footnotesize] {$u_2=\omega r_2$};
+  \draw[W] ($(P)+(-2.0,0)$) -- ++(1.29,0.6) node[pos=0.25, above left, font=\footnotesize] {$W_2$};
+  \draw[V] (P) -- ++(-0.71,0.6) node[pos=1.0, above, font=\footnotesize] {$V_2$};
+  \draw[tinta, densely dotted, line width=0.5pt] ($(P)+(-0.71,0.6)$) -- ($(P)+(-0.71,0)$);
+  \node[lbl, font=\scriptsize, anchor=west] at ($(P)+(0.1,0.35)$) {$V_{r2}=\dfrac{Q}{2\pi r_2 b_2}$};
+  \node[lbl, font=\scriptsize, anchor=west] at ($(P)+(0.1,-0.35)$) {$V_{t2}=u_2-\dfrac{V_{r2}}{\tan\beta_2}$};
+  % triangulo de entrada en la raiz de un alabe (th = 225 deg, r = 1)
+  \coordinate (R) at (-0.707,-0.707);
+  \draw[V] (R) -- ++(-0.55,-0.55) node[pos=1, left, font=\footnotesize] {$V_1$};
+  \draw[U] (R) -- ++(0.5,-0.5) node[pos=1, below, font=\footnotesize] {$u_1$};
+  \draw[W] ($(R)+(0.5,-0.5)$) -- ($(R)+(-0.55,-0.55)$) node[pos=0.5, below, font=\footnotesize] {$W_1$};
+  \node[lbl, font=\scriptsize, align=center] at (-2.4,-3.5) {entrada radial: $V_{t1}=0$};
+  % ecuaciones
+  \node[draw=tinta, rounded corners=2pt, fill=white, font=\footnotesize, align=left, anchor=north west] at (-3.6,-3.9)
+    {$T_{eje}=\rho Q\,(r_2V_{t2}-r_1V_{t1})$\quad (momento angular)\\[2pt]
+     $H_{th}=\dfrac{u_2V_{t2}-u_1V_{t1}}{g}$\quad (Euler),\qquad $V_{t2}'=\sigma\,V_{t2}$ (deslizamiento)\\[2pt]
+     $H=\eta_h\,\sigma\,H_{th}$,\qquad $\dot W_{eje}=\dfrac{\rho g Q H}{\eta_h\eta_m\eta_v}$};
+  % ================= curvas H-Q =================
+  \begin{scope}[shift={(6.0,-2.6)}]
+    \node[lbl, font=\small\bfseries, anchor=west] at (-0.6,7.0) {(b) Del tri\'angulo a la curva de la bomba};
+    \draw[-{Stealth[length=2.4mm]}, tinta, line width=0.8pt] (0,0) -- (7.2,0) node[below, font=\footnotesize] {$Q$};
+    \draw[-{Stealth[length=2.4mm]}, tinta, line width=0.8pt] (0,0) -- (0,6.3) node[left, font=\footnotesize] {$H$};
+    % Euler infinito (recta) : H = a - b Q
+    \draw[uvel!70!black, line width=1pt, dashed] (0,5.6) -- (6.5,2.0) node[right, font=\scriptsize] {$H_{th,\infty}$ (Euler)};
+    \draw[wrel, line width=1pt, dashed] (0,4.9) -- (6.5,1.6) node[right, font=\scriptsize] {$\sigma H_{th}$ (deslizamiento)};
+    % real: menos friccion (~Q^2) y choque (~(Q-Qd)^2)
+    \draw[cabs, line width=1.6pt, domain=0:6.2, samples=40] plot (\x, {4.9-0.508*\x-0.03*\x*\x-0.06*(\x-3.6)*(\x-3.6)}) node[right, font=\scriptsize] {$H$ real};
+    % sistema
+    \draw[sist, line width=1.4pt, domain=0:6.0, samples=30] plot (\x, {1.5+0.07*\x*\x}) node[right, font=\scriptsize] {sistema};
+    \node[lbl, font=\scriptsize, sist, align=left, anchor=west] at (0.1,1.05) {$H_{sis}=\dfrac{p_{cald}-p_{cond}}{\rho g}+k\,Q^2$};
+    % punto de operacion: resolver aprox. numericamente en el dibujo (x ~ 4.68)
+    \fill[tinta] (3.82,2.52) circle (2.6pt);
+    \draw[tinta, densely dotted] (3.82,2.52) -- (3.82,0) node[below, font=\scriptsize] {$Q_{op}$};
+    \node[lbl, font=\scriptsize, anchor=south west] at (3.8899999999999997,2.62) {punto de operaci\'on};
+    \node[lbl, font=\scriptsize, align=left, anchor=north west] at (-0.6,-0.6)
+      {p\'erdidas: fricci\'on $\propto Q^2$ y choque $\propto (Q-Q_d)^2$\\$\beta_2<90^\circ$ (hacia atr\'as) $\Rightarrow$ curva descendente y estable};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

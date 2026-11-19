@@ -1,0 +1,96 @@
+% NB15b -- Esquema de la planta termoelectrica integrada (ciclo combinado SGT-800 + HRSG de domo + Rankine)
+% con la fuente alternativa de calor (hogar de biomasa EFB/PMF) y la conexion a la red.
+% Reemplaza "CICLO TERMODINAMICO.jpg" de la entrega PlantaTermoelectrica (Sanchez, Aparicio, Roa).
+% Numeracion de estados como en Cengel & Boles (Ej. ciclo combinado): gas 5-9, vapor 1-4.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,decorations.pathmorphing}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{frio}{HTML}{2A78D6}
+\definecolor{caliente}{HTML}{E34948}
+\definecolor{tibio}{HTML}{EB6834}
+\definecolor{vapor}{HTML}{4A3AA7}
+\definecolor{red}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  flujo/.style={-{Stealth[length=3mm]}, line width=2pt},
+  est/.style={circle, draw=tinta, fill=white, line width=0.8pt, inner sep=1.2pt, font=\footnotesize\bfseries},
+  caja/.style={draw=tinta, line width=1pt, rounded corners=2pt, align=center, font=\small},
+  gen/.style={circle, draw=tinta, line width=1pt, fill=red!15, minimum size=9mm, font=\small\bfseries}]
+  % ===================== TURBINA DE GAS =====================
+  \draw[caja, fill=frio!15] (0,0) -- (2,0.6) -- (2,2.4) -- (0,3) -- cycle;
+  \node[lbl] at (1,1.5) {C};
+  \node[lbl, below, font=\footnotesize, align=center] at (1,-0.05) {compresor axial\\15 etapas};
+  \draw[caja, fill=caliente!15] (4.4,0.6) -- (6.4,0) -- (6.4,3) -- (4.4,2.4) -- cycle;
+  \node[lbl] at (5.4,1.5) {TG};
+  \node[lbl, below, font=\footnotesize, align=center] at (5.4,-0.05) {turbina axial\\3 etapas};
+  \draw[tinta, line width=2.5pt] (2,1.5) -- (4.4,1.5);
+  \draw[tinta, line width=2.5pt] (0,1.5) -- (-1.2,1.5);
+  \node[gen] (G1) at (-1.7,1.5) {G$_1$};
+  \node[caja, fill=caliente!30, minimum width=1.6cm, minimum height=0.8cm] (cc) at (3.2,4.1) {c\'amara de\\combusti\'on};
+  \draw[flujo, frio] (-0.2,3.6) -- (0.4,3.6) -- (0.4,2.88);
+  \node[est] at (-0.2,3.6) {5}; \node[lbl, left, font=\footnotesize] at (-0.45,3.6) {aire, $p_0,T_0$};
+  \draw[flujo, tibio] (1.6,2.6) -- (1.6,4.1) -- (cc.west);
+  \node[est] at (1.6,3.4) {6};
+  \draw[flujo, caliente] (cc.east) -- (4.8,4.1) -- (4.8,2.55);
+  \node[est] at (4.8,3.4) {7};
+  \draw[flujo, tibio!50!caliente, dashed] (3.2,5.3) -- (cc.north); \node[lbl, font=\footnotesize, above] at (3.2,5.3) {gas natural $\dot m_f$, PCI};
+  \node[lbl, font=\footnotesize, align=center] at (3.2,-1.15) {SGT-800: 62 MW, $\Pi_c=21.1$, 6600 rpm};
+  % ===================== HRSG con domo =====================
+  \draw[caja, fill=metal!25] (8,-0.6) rectangle (10.4,5.4);
+  \node[lbl, font=\small\bfseries, rotate=90] at (8.25,2.4) {HRSG (caldera de recuperaci\'on)};
+  \draw[flujo, caliente] (6.4,1.5) -- (7.3,1.5) -- (7.3,4.8) -- (8,4.8);
+  \node[est] at (7.3,3.2) {8};
+  % haces: sobrecalentador, evaporador, economizador (gas de arriba hacia abajo)
+  \foreach \y/\n/\c in {4.3/SH/caliente, 2.6/EV/vapor, 0.9/ECO/frio} {
+    \draw[\c, line width=1.1pt] (8.7,\y+0.5) -- (10.0,\y+0.5) -- (10.0,\y+0.3) -- (8.7,\y+0.3) -- (8.7,\y+0.1) -- (10.0,\y+0.1) -- (10.0,\y-0.1) -- (8.7,\y-0.1);
+    \node[lbl, font=\scriptsize\bfseries, \c] at (9.35,\y-0.38) {\n};}
+  \draw[flujo, caliente!40!metal] (9.2,-0.6) -- (9.2,-1.5); \node[est] at (9.2,-1.1) {9};
+  \node[lbl, font=\footnotesize, right] at (9.45,-1.3) {chimenea};
+  % domo
+  \draw[tinta, line width=1pt, fill=frio!10] (11.6,3.8) ellipse (0.75 and 0.45);
+  \fill[frio!40] (10.88,3.75) arc (186:354:0.72 and 0.42) -- cycle;
+  \node[lbl, font=\footnotesize\bfseries] at (11.6,4.45) {domo};
+  \draw[vapor, line width=1pt] (10.0,2.95) -- (11.3,2.95) -- (11.3,3.4);
+  \draw[frio, line width=1pt] (11.9,3.4) -- (11.9,2.25) -- (10.0,2.25);
+  \node[lbl, font=\scriptsize, align=left, anchor=west] at (12.4,3.75) {bajantes /\\elevadores};
+  % ===================== fuente alternativa: hogar de biomasa =====================
+  \draw[caja, fill=tibio!12, dashed] (11.05,-0.3) rectangle (13.85,1.45);
+  \node[lbl, font=\footnotesize, align=center] at (12.45,0.85) {hogar de biomasa\\EFB / PMF};
+  \node[lbl, font=\scriptsize, align=center, tibio!70!black] at (12.45,0.15) {config. B: reemplaza TG};
+  \fill[pattern=crosshatch, pattern color=tibio] (11.35,-0.25) rectangle (13.55,-0.08);
+  \draw[-{Stealth[length=2.2mm]}, dashed, tibio, line width=1pt] (12.45,1.45) -- (12.45,3.1) node[pos=0.45, right, font=\scriptsize] {$\dot Q_{hogar}$};
+  % economizador -> domo (agua de alimentacion)
+  \draw[-{Stealth[length=2.2mm]}, frio, line width=1pt] (10.0,1.3) -- (10.6,1.3) -- (10.6,3.75) -- (10.85,3.75);
+  % ===================== CICLO RANKINE =====================
+  \draw[caja, fill=vapor!12] (14.6,3.4) -- (16.4,2.8) -- (16.4,5.4) -- (14.6,4.8) -- cycle;
+  \node[lbl] at (15.5,4.1) {TV};
+  \node[lbl, font=\footnotesize, above, align=center] at (15.5,5.45) {turbina de vapor\\30 etapas};
+  \draw[flujo, vapor] (11.6,4.25) -- (11.6,5.8) -- (9.35,5.8) -- (9.35,4.8);
+  \draw[flujo, caliente] (10.0,4.65) -- (13.4,4.65) -- (13.4,4.1) -- (14.6,4.1);
+  \node[est] at (13.4,4.4) {3};
+  \draw[red!60!black, line width=1pt] (14.2,4.4) rectangle (14.4,3.8); \node[lbl, font=\scriptsize, align=center] at (14.3,3.45) {v\'alvula\\de control};
+  \draw[tinta, line width=2.5pt] (16.4,4.1) -- (17.4,4.1);
+  \node[gen] (G2) at (17.9,4.1) {G$_2$};
+  % condensador
+  \draw[caja, fill=frio!10] (14.8,0.0) rectangle (17.0,1.6);
+  \foreach \y in {0.4,0.8,1.2} \draw[frio, line width=0.8pt] (14.9,\y) -- (16.9,\y);
+  \node[lbl, font=\footnotesize, anchor=west] at (16.05,1.85) {condensador};
+  \draw[flujo, vapor!60] (15.9,2.95) -- (15.9,1.6); \node[est] at (15.9,2.25) {4};
+  \draw[flujo, frio!60!tinta] (17.6,0.4) -- (17.0,0.4); \draw[flujo, frio!60!tinta] (17.0,1.2) -- (17.6,1.2);
+  \node[lbl, font=\scriptsize, right, align=left] at (17.6,0.8) {agua de\\enfriamiento};
+  % bomba
+  \draw[tinta, line width=1pt, fill=frio!25] (14.6,-1.0) circle (0.38);
+  \draw[tinta, line width=1pt] (14.6,-1.0) -- (14.92,-0.8);
+  \node[lbl, font=\footnotesize, below] at (14.6,-1.4) {bomba};
+  \draw[flujo, frio] (15.9,0.0) -- (15.9,-1.0) -- (14.98,-1.0); \node[est] at (15.9,-0.5) {1};
+  \draw[flujo, frio] (14.22,-1.0) -- (10.9,-1.0) -- (10.9,0.7) -- (10.0,0.7); \node[est] at (12.45,-1.0) {2};
+  % ===================== RED =====================
+  \draw[red!60!black, line width=2.2pt] (-1.7,6.6) -- (19.2,6.6);
+  \node[lbl, font=\small\bfseries, red!50!black, anchor=west] at (-1.6,6.95) {red el\'ectrica: $P_{demanda}(t)$, $f(t)=60$ Hz};
+  \draw[red!60!black, line width=1pt] (G1.north) -- (-1.7,6.6);
+  \draw[red!60!black, line width=1pt] (G2.north) -- (17.9,6.6);
+  \foreach \x in {18.6,19.0} {\draw[-{Stealth[length=2mm]}, red!60!black, line width=1pt] (\x,6.6) -- (\x,6.1);}
+  \node[lbl, font=\scriptsize, red!50!black] at (18.8,5.85) {carga};
+\end{tikzpicture}
+\end{document}
