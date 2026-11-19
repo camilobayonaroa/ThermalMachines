@@ -68,3 +68,173 @@
   note         = {Fuente: research\_sources/Crank and Piston Dynamics/Informe Est\'atica Entrega 3-1.pdf.
                   M\'odulo AVA derivado: notebooks/10b\_Bonus\_Mecanismo\_Compresion\_Variable.ipynb}
 }
+
+@misc{belalcazar2026ottoturbo,
+  author       = {Belalc{\'a}zar Rodr{\'i}guez, Ana Gabriela and Libos Dallos, Santiago},
+  title        = {{Motor Otto turboalimentado: combustibles para F1, ciclo Miller e intercooler}},
+  year         = {2026},
+  howpublished = {Proyecto de M\'aquinas T\'ermicas (entregas 1-3), Pontificia Universidad Javeriana},
+  note         = {Fuente: research\_sources/EntregasCurso/MotorOttoTurbo.ipynb. Cin\'etica global y ciclo Otto NA
+                  reutilizados en notebooks/10b\_Bonus\_Mecanismo\_Compresion\_Variable.ipynb (2026-11-13).}
+}
+
+@article{yoo2013isooctane,
+  author  = {Yoo, Chun Sang and Luo, Zhaoyu and Lu, Tianfeng and Kim, Hongjip and Chen, Jacqueline H.},
+  title   = {A {DNS} study of ignition characteristics of a lean iso-octane/air mixture under {HCCI} and {SACI} conditions},
+  journal = {Proceedings of the Combustion Institute},
+  volume  = {34}, number = {2}, pages = {2985--2993}, year = {2013},
+  note    = {Mecanismo esquel\'etico 143 especies / 1178 reacciones; archivo Cantera de PelePhysics
+             (Mechanisms/isooctane\_lu, commit 8cd738c), copiado en notebooks/data/isooctane\_yoo2013.yaml.}
+}
+
+@techreport{kiga2018vcturbo,
+  author      = {Kiga, Shinichi and others},
+  title       = {Development of a New 2{L} Gasoline {VC-Turbo} Engine with the World's First Variable Compression Ratio Technology},
+  institution = {SAE International}, number = {2018-01-0371}, year = {2018},
+  note        = {Datos de validaci\'on de NB10b: carrera 90.1/88.9 mm a r=8/14, 1997/1970 cc, 200 kW @ 5600 rpm, 380 N m @ 1600-4800 rpm.}
+}
+
+% --- NB10c: motor diesel turbo + intercooler (2026-11-17) ---
+@misc{munoz2026diesel,
+  author = {Mu{\~n}oz, Juan Carlos and Pedraza, Samuel Gustavo},
+  title  = {Modelamiento termo-fluido de un intercooler aire-aire acoplado a un motor di{\'e}sel},
+  year   = {2026}, institution = {Pontificia Universidad Javeriana},
+  note   = {Entrega de M{\'a}quinas T{\'e}rmicas (research\_sources/EntregasCurso/MotorDieselIntercooler.ipynb). M{\'o}dulo: notebooks/10c\_Bonus\_Motor\_Diesel\_Turbo\_Intercooler.ipynb}
+}
+@misc{ecn2019smallbore,
+  author = {{Engine Combustion Network}},
+  title  = {Small-Bore Diesel Engine (GM 1.9L head): Piston Bowl Geometry Study, CDC9 data},
+  howpublished = {\url{https://ecn.sandia.gov/engines/small-bore-diesel-engine/}},
+  note   = {Sandia National Laboratories. Geometr{\'i}a, v{\'a}lvulas, inyector y presi{\'o}n/AHRR medidas usadas para validar NB10c}
+}
+@inproceedings{perini2019bowl,
+  author = {Perini, Federico and Busch, Stephen and others},
+  title  = {Piston Bowl Geometry Effects on Combustion Development in a High-Speed Light-Duty Diesel Engine},
+  booktitle = {SAE Technical Paper 2019-24-0167}, year = {2019}
+}
+@article{yoo2011heptane,
+  author = {Yoo, Chun Sang and Lu, Tianfeng and Chen, Jacqueline H. and Law, Chung K.},
+  title  = {Direct numerical simulations of ignition of a lean n-heptane/air mixture with temperature inhomogeneities at constant volume: Parametric study},
+  journal = {Combustion and Flame}, volume = {158}, pages = {1727--1741}, year = {2011}, doi = {10.1016/j.combustflame.2011.01.025}
+}
+
+@misc{sanchez2026plantatermo,
+  author       = {S{\'a}nchez, Juan Andr{\'e}s and Aparicio, Juan David and Roa, Juan David},
+  title        = {{Planta Termoel{\'e}ctrica: ciclo combinado SGT-800, turbomaquinaria, caldera y condensador}},
+  year         = {2026},
+  howpublished = {Entrega del curso de M\'aquinas T\'ermicas, Pontificia Universidad Javeriana},
+  note         = {Fuente: research\_sources/EntregasCurso/PlantaTermoel{\'e}ctrica.ipynb.
+                  M\'odulo AVA derivado: notebooks/15b\_Bonus\_Planta\_Termoel{\'e}ctrica\_Integrada.ipynb}
+}
+
+@article{astrom2000drum,
+  author  = {{\AA}str{\"o}m, Karl Johan and Bell, Rodney D.},
+  title   = {Drum-boiler dynamics},
+  journal = {Automatica}, volume = {36}, number = {3}, pages = {363--378}, year = {2000},
+  doi     = {10.1016/S0005-1098(99)00171-5}
+}
+
+@techreport{astrom1998tfrt,
+  author      = {{\AA}str{\"o}m, Karl Johan and Bell, Rodney D.},
+  title       = {Drum-Boiler Dynamics},
+  institution = {Department of Automatic Control, Lund Institute of Technology},
+  number      = {TFRT-7577}, year = {1998},
+  url         = {https://lup.lub.lu.se/record/8602763},
+  note        = {Datos de planta P16-G16 (Fig. 10) digitalizados en notebooks/data/astrom\_bell\_fig10.json}
+}
+
+@misc{siemens2023sgt800,
+  author       = {{Siemens Energy}},
+  title        = {{SGT-800 Industrial Gas Turbine}},
+  year         = {2023},
+  howpublished = {P\'oster y ficha t\'ecnica del fabricante (calificaci\'on de 62 MW; SCC-800)}
+}
+
+@unpublished{delgado2024turboprop,
+  author       = {Delgado Pinz{\'o}n, Sof{\'i}a Valentina and Gonz{\'a}lez Posada, Juan Pablo and Reyes Perilla, Juan Jos{\'e} and Bayona Roa, Camilo Andr{\'e}s},
+  title        = {{Simulation of Turboprop Systems using Simulink: Development and Validation of Computational Mechanical Model}},
+  year         = {2024},
+  note         = {Manuscrito, Pontificia Universidad Javeriana. Fuente: research\_sources/Turboprop Engine/main.tex,
+                  intento\_50metrosporsegundo.slx, PROPELLER\_BEM\_SIMULINK.slx.
+                  M\'odulo AVA derivado: notebooks/14a\_Bonus\_Turbohelice\_PT6\_Completo.ipynb}
+}
+
+@mastersthesis{castellanos2019pt6,
+  author       = {Castellanos Proa{\~n}os, Diego Alejandro},
+  title        = {{Simulaci{\'o}n Computacional de Operaci{\'o}n de Turbina de Gas Tipo PT6}},
+  school       = {Universidad ECCI, Facultad de Ingenier{\'i}a Mec{\'a}nica},
+  type         = {Tesis de grado},
+  year         = {2019},
+  note         = {Director: C. A. Bayona Roa; asesor: A. G. Rodr{\'i}guez Mel{\'e}ndez. Fuente: research\_sources/Turboprop Engine/PT6 Simulation.zip
+                  (PT6FINAL.pdf, PARAMETRIZACIONFINAL.m). Contiene la carta de estaciones P\&WC usada como validaci\'on en NB14a}
+}
+
+@inproceedings{yoshinaka1985pt6a65,
+  author       = {Yoshinaka, Tsukasa and Thue, Kenneth S.},
+  title        = {{A Cost-Effective Performance Development of the PT6A-65 Turboprop Compressor}},
+  booktitle    = {ASME International Gas Turbine Conference and Exhibit},
+  number       = {85-IGT-41},
+  year         = {1985},
+  note         = {Copia en PT6 Simulation.zip (10.1.1.858.5344.pdf). \'Angulos de metal, incidencia y desviaci\'on usados en NB14a}
+}
+
+@manual{easa2022tcdsPT6A41,
+  author       = {{European Union Aviation Safety Agency}},
+  title        = {{Type-Certificate Data Sheet IM.E.078: Pratt \& Whitney Canada PT6A-41 Series Engines, Issue 02}},
+  year         = {2022},
+  note         = {PT6A-61: 634 kW, ITT 800 $^\circ$C, Ng 100\,\% = 37468 rpm, N2 2000 rpm = 30145 rpm, potencia plana hasta 46 $^\circ$C}
+}
+
+@article{traub2016propeller,
+  author       = {Traub, Lance W.},
+  title        = {{Simplified propeller analysis and design including effects of stall}},
+  journal      = {The Aeronautical Journal},
+  volume       = {120},
+  number       = {1227},
+  year         = {2016}
+}
+
+@unpublished{castellanos2025mccauley,
+  author       = {Castellanos-Proa{\~n}os, Diego and Bayona-Roa, Camilo and L{\'o}pez G{\'o}mez, Mauricio and Garc{\'i}a-Navarro, Juan Guillermo},
+  title        = {{Aerodynamic analysis of a four-bladed McCauley propeller integrating low-order BEM with high-order CFD in a computational simulation framework}},
+  note         = {Manuscrito (AIAA), entregado por el profesor el 2026-11-19 (no est\'a en research\_sources). Datos usados en NB14a/NB14:
+                  geometr\'ia de la Fig. 5b, Tabla 1, par CFD de la Fig. 13 y Tabla 2 (digitalizados en notebooks/data/mccauley\_cfd.json); sigma = 0.9, m = 0.3, alpha\_stall = 20.6 grados}
+}
+
+@unpublished{cadavid2026ramjet,
+  author       = {Cadavid Franco, Santiago and Bayona Roa, Camilo},
+  title        = {{One-Dimensional Numerical Modelling of a Supersonic RAMJET Engine with Parametrizable Geometry}},
+  note         = {Manuscrito y c\'odigos MATLAB (research\_sources/RAMJET Engine: main.tex, default\_params.m, ramjet\_geometry.m,
+                  ramjet\_simulation\_corregido.m, MODELO\_RAMJET.m). M\'odulo: notebooks/14b\_Bonus\_Motor\_RAMJET.ipynb}
+}
+
+@thesis{dallos2024ramjet,
+  author       = {Dallos Trujillo, A. and Bayona Roa, Camilo A.},
+  title        = {{Integrated Thermodynamic Analysis of a Generic RAMJET}},
+  school       = {Pontificia Universidad Javeriana},
+  type         = {Tesis de pregrado},
+  year         = {2024},
+  note         = {Figura de validaci\'on (empuje espec\'ifico y TSFC, Jet A-1 e H2, Mach 2.3--4) digitalizada de forma aproximada para V4 de NB14b}
+}
+
+@techreport{naca1135,
+  author       = {{Ames Research Staff}},
+  title        = {{Equations, Tables, and Charts for Compressible Flow}},
+  institution  = {NACA},
+  number       = {Report 1135},
+  year         = {1953}
+}
+
+@techreport{nacaRME52L18a,
+  author       = {{NACA}},
+  title        = {{Research Memorandum E52L18a (toma c\'onica a Mach 2; recuperaci\'on 0.825)}},
+  institution  = {NACA},
+  year         = {1953},
+  url          = {https://ntrs.nasa.gov/api/citations/19930087580/downloads/19930087580.pdf}
+}
+
+@misc{mil5007d,
+  author       = {{U.S. Department of Defense}},
+  title        = {{MIL-E-5007D: Engines, Aircraft, Turbojet and Turbofan, General Specification for}},
+  year         = {1973}
+}

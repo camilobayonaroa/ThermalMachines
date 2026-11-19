@@ -1,0 +1,31 @@
+% NB14b -- Regimenes de operacion de la toma: supercritico, critico, subcritico y zumbido.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,decorations.pathmorphing}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{choque}{HTML}{4A3AA7}
+\definecolor{frio}{HTML}{2A78D6}
+\begin{tikzpicture}[x=1cm,y=1cm, tag/.style={font=\scriptsize, text=tinta, align=center}]
+\foreach \i/\tit/\xs/\sp in {0/supercr\'itico/1.9/0, 1/cr\'itico/1.3/0, 2/subcr\'itico/0.6/1, 3/zumbido/0.2/2}{
+  \begin{scope}[shift={(\i*4.4,0)}]
+    \fill[metal!70] (0,0) -- (1.25,0.75) .. controls (1.8,0.95) and (2.4,0.8) .. (3.0,0.0) -- cycle;
+    \draw[tinta, line width=0.8pt] (0,0) -- (1.25,0.75) .. controls (1.8,0.95) and (2.4,0.8) .. (3.0,0);
+    \draw[tinta, line width=1.6pt] (1.3,1.45) .. controls (2.0,1.6) and (2.6,1.65) .. (3.6,1.65);
+    \draw[choque, line width=1.1pt] (0,0) -- (1.3,1.45);
+    \ifnum\sp=0
+      \draw[choque, line width=1.5pt, decorate, decoration={zigzag, segment length=3, amplitude=1}] (\xs,0.95) -- (\xs,1.55);
+    \else\ifnum\sp=1
+      \draw[choque, line width=1.5pt, decorate, decoration={zigzag, segment length=3, amplitude=1}] (\xs,0.45) .. controls (\xs-0.1,1.0) .. (\xs+0.15,1.9);
+      \draw[-{Stealth[length=2mm]}, frio] (1.0,1.75) -- (1.6,2.15) node[right, tag] {derrame};
+    \else
+      \draw[choque, line width=1.5pt, decorate, decoration={zigzag, segment length=3, amplitude=1}] (\xs,0.15) .. controls (\xs-0.15,1.0) .. (\xs+0.2,2.1);
+      \draw[choque, dashed] (\xs+0.5,0.25) .. controls (\xs+0.35,1.0) .. (\xs+0.7,2.0);
+      \draw[{Stealth[length=2mm]}-{Stealth[length=2mm]}, choque] (\xs,2.3) -- (\xs+0.6,2.3);
+      \node[tag, choque] at (\xs+0.3,2.6) {oscila};
+    \fi\fi
+    \node[font=\small\bfseries] at (1.8,-0.6) {\tit};
+  \end{scope}}
+  \node[tag, text width=17cm] at (8.4,-1.5) {Supercr\'itico: la tobera traga m\'as de lo que llega; el choque terminal entra al ducto a mayor Mach (m\'as p\'erdidas). Cr\'itico: choque en el labio (m\'axima recuperaci\'on con m\'axima captura). Subcr\'itico: la c\'amara pide menos aire; el choque sale y parte del aire se derrama (arrastre aditivo). Zumbido: con demasiado derrame la caracter\'istica se vuelve inestable y el choque oscila.};
+\end{tikzpicture}
+\end{document}

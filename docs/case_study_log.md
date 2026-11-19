@@ -1,5 +1,292 @@
 # Bitácora del caso de estudio
 
+## 2026-11-19 (noche) — NB14b: motor RAMJET completo (bonus)
+
+- **Módulo:** `notebooks/14b_Bonus_Motor_RAMJET.ipynb` (53 celdas, 7 widgets). Fuentes: manuscrito y códigos MATLAB de Cadavid Franco & Bayona Roa (`research_sources/RAMJET Engine`) y la tesis de Dallos Trujillo & Bayona Roa (2024). El prompt quedó en `PROMPTS.md` y el profesor pidió ejecutarlo de inmediato, sin la ronda de aprobación del plan.
+- **Modelo acoplado:**
+  - toma de cono con Taylor–Maccoll, choque en el labio a Mach 2 y choque terminal;
+  - difusor cuasi-1D con fricción;
+  - estabilizadores en V: un PSR integrado en el tiempo decide el apagado, y un frente turbulento desde $S_L$ (Cantera `FreeFlame` para H₂/CH₄; Metghalchi–Keck para los líquidos) da $b(x)$ y $\eta_b$;
+  - cámara cuasi-1D con los coeficientes de Shapiro y detección de estrangulamiento térmico;
+  - tobera C-D de gas real (Cantera, congelada o en equilibrio).
+  - La posición del choque terminal (o el derrame) se resuelve con `brentq` hasta que la toma entrega lo que la garganta sónica traga. Regímenes: supercrítico, crítico, subcrítico, zona de zumbido y llama apagada.
+- **Dinámica en el tiempo:** autoignición (cinética detallada), zumbido tipo Greitzer con característica en S, y trayectoria de un blanco aéreo con control PI de φ sobre el mapa del motor (4 combustibles).
+- **Hallazgos verificados en la entrega:**
+  1. la captura del labio dibujado es el 26 % de la que exige su propio caudal;
+  2. la garganta de la tabla del artículo (139.7 mm) no es la del código;
+  3. el caudal se impone en la garganta sin compatibilidad con la toma;
+  4. $c_p$ y $\gamma$ constantes sobreestiman $T_{04}$ en 148 K (1623 K frente a 1475 K de Cantera con f = 0.03);
+  5. φ ≈ 0.45 premezclado está en el límite de apagado;
+  6. la punta Hermite es roma;
+  7. su $\eta_d$ = 0.92 coincide con MIL-E-5007D.
+- **Diseño corregido** (SUPUESTO documentado): cono de 25°, labio de 60 mm, garganta de 72 mm dimensionada para quedar levemente subcrítica con φ = 0.6, salida de 94 mm adaptada a 10 km y estabilizadores con 41 % de bloqueo. Punto de diseño (M2, 10 km, Jet A-1, φ 0.6): subcrítico al 97.8 %, π_d 0.921, η_b 0.944, F_N 1887 N, Isp 1768 s.
+- **Validación:** 9 verificaciones < 1 % (peor 0.17 %: réplica del empuje de la entrega). V3: recuperación crítica 0.924 frente a 0.925 de MIL-E-5007D y 0.825 del NACA RM E52L18a (+12 %, el modelo no tiene interacción choque–capa límite). V4: frente a Dallos ≤ 3.3 % entre Mach 2.3 y 2.8; hasta +13 % a Mach 4, brecha que se deja abierta y no se atribuye a una causa única.
+- **Correcciones durante la sesión:**
+  - El bloqueo inicial de los estabilizadores (69 %, K = 8) y la suma de bandas quemadas (que contaba dos veces los solapes) se reemplazaron por un bloqueo del 41 % y la unión geométrica de bandas anulares, coherente con el dibujo.
+  - La $S_{ref}$ del vehículo pasó de 0.038 a 0.070 m²: con la menor, el PI quedaba saturado en φ_min y no sostenía el Mach objetivo.
+  - El texto de V4 decía que el modelo caía por debajo de la tesis a Mach alto, cuando en realidad queda por encima.
+- **Métricas:** prosa 4944 → 2575 palabras (−47.9 % respecto al manuscrito); 11 figuras por código + 3 TikZ (`docs/figures/tikz/rj_*.tex`). Ejecuta sin errores: ~220 s sin caché (`notebooks/data/ramjet_resultados.json`), menos con caché.
+
+## 2026-11-19 (tarde) — NB14a: hélice rehecha con el artículo McCauley (entregado por el profesor)
+
+El profesor entregó el manuscrito AIAA de Castellanos-Proaños, Bayona-Roa, López Gómez y García-Navarro. Contiene la hélice McCauley escaneada en 3D, Traub calibrado contra RANS y el CFD de 4 regímenes. No estaba en `research_sources`; se digitalizó en `notebooks/data/mccauley_cfd.json`:
+- Fig. 5b (cuerda y paso local);
+- Tabla 1 (β, ρ y J por régimen);
+- Fig. 13 (par CFD y del BEMT del artículo);
+- Tabla 2 (estático, β = 22°);
+- parámetros de Traub σ = 0.9, m = 0.3, α_st = 20.6°.
+
+**Decisiones mías corregidas por los datos:**
+1. Había escalado la cuerda por 1.193/0.9. **Era un error**: la Fig. 5b muestra que el polinomio de la entrega ya está en metros para R = 1.193 m.
+2. La torsión supuesta (paso geométrico constante de 3 m) se reemplazó por la medida.
+3. El desfase de paso calibrado (d0) se eliminó: con la geometría medida no hace falta calibrar la hélice.
+4. El "hallazgo" de que α_st = 4.6–6.1° no era físico **se corrigió**. Son valores 2D de XFOIL coherentes con la Fig. 9 del artículo. El problema es usarlos en una pala que gira, donde hay retraso rotacional de la pérdida; el artículo usa un 20.6° efectivo.
+5. La verificación de la hélice por "velocidad de crucero implícita" usaba altitudes supuestas (3000 y 7600 m). Se reemplazó por las condiciones reales de la Tabla 1 (FL220 y FL350).
+
+**V3, nueva validación sin calibración:**
+
+| Régimen | Este modelo | BEMT del artículo |
+|---|---|---|
+| Rodaje | −1.8 % | +13 % |
+| Estático | −2.5 % | — |
+| Despegue | +5.2 % | +31 % |
+| Crucero FL350 | −27 % | −23 % |
+| Crucero FL220 | −39 % | −47 % |
+| RMS en 20 condiciones | 23.8 % | 31.2 % |
+
+La brecha de crucero es la que el propio artículo atribuye a la punta transónica y a la separación 3D.
+
+**El motor no cambia:** el paso de despegue estático sale en 32.3°, frente a 32° de la Tabla 1, y El Dorado sigue limitado a 2.76 kN·m.
+
+**Observaciones para el artículo:**
+- En la Fig. 13 los rótulos de baja y alta altitud están intercambiados respecto a la Tabla 1.
+- J = 0.009 en la Tabla 1 parece errata de 0.090.
+- No se dice si σ es por grado o por radián: la comparación con el CFD favorece σ por grado.
+
+**Ejecución:** NB14a ejecuta en 741 s sin caché (0 errores); NB14 también se actualizó con la torsión y la cuerda medidas.
+
+## 2026-11-19 (implementación) — NB14a (turbohélice PT6A-61 completo) terminado y NB14 corregido
+
+**Prompt:** agregado a `PROMPTS.md` (Fase 2) y ejecutado en la misma sesión. **Decisiones del profesor sobre el plan:**
+1. Motor de referencia PT6A-61.
+2. Condensar lo redundante en NB14.
+3. Proponer la geometría de la hélice a partir de los datos McCauley de la entrega.
+4. Crear un Bonus 14a separado y corregir en NB14 lo que estaba mal.
+
+**Archivos:**
+- `notebooks/14a_Bonus_Turbohelice_PT6_Completo.ipynb` (57 celdas, 10 widgets);
+- 5 TikZ `docs/figures/tikz/pt6_*.tex`;
+- `notebooks/data/pt6_carta_estaciones.json` (carta digitalizada) y `notebooks/data/pt6_resultados.json` (caché de las 2 misiones y los 6 ensayos de combustible).
+
+**Fuentes de validación reales:**
+- La carta "STATIONS (GRAPH)" de P&WC (despegue, día estándar, nivel del mar), embebida en la tesis de 2019 dentro de `PT6 Simulation.zip`, se digitalizó con `pdfimages`, ejes calibrados por etiquetas e incertidumbre de ±8 °C y ±0.8 psia.
+- El TCDS EASA IM.E.078 (descargado): 634 kW, ITT 800 °C, Ng 100 % = 37 468 rpm, máximo 39 000 rpm, N2 2000 rpm ↔ 30 145 rpm, 3A+1C, potencia plana hasta 46 °C.
+- El artículo de P&WC sobre el compresor del PT6A-65 (ASME 85-IGT-41, también en el zip) da los ángulos de metal, la incidencia y la desviación de diseño.
+
+**Modelo:**
+- **Compresor:** línea media de 3 etapas axiales y 1 centrífuga (Euler + continuidad con densidad estática + pérdida por incidencia + deslizamiento). El mapa se tabula en variables corregidas (0.7 s) y se invierte en el RHS.
+- **Cámara 0D** con EDO de masa y energía; productos de Jet A-1 y biodiésel con Cantera/NASA (LHV impuesto vía $h_f$).
+- **Turbinas** con toberas estranguladas y η(ν).
+- **Hélice de Traub** con la caracterización XFOIL de la entrega.
+- **Ejes, gobernador de Ng, gobernador de paso y "piloto" de par.** En total 8 EDO con LSODA; una evaluación del RHS cuesta 0.6 ms.
+
+**Calibración** (5 parámetros físicos):
+- kr = 1.071, η del centrífugo = 0.692 y ṁ = 3.47 kg/s contra T3, p3 y la incidencia de diseño de la etapa 1;
+- ε = 11 % de dilución contra la ITT;
+- η_T = 0.912 contra 634 kW.
+
+**Validación:**
+- **V1:** p5 −6.8 %, T6 −3.0 % (K).
+- **V2:** potencia plana predicha hasta 36.5 °C frente a 46 °C del TCDS (conservador).
+- **V3:** la tabla paso-par implica cruceros de 269 y 278 kt, frente a ~280 KTAS del Cheyenne IIIA; FM estática 0.79.
+- **V4:** LHV Jet-A(g) +0.58 %.
+- 7 verificaciones < 1 % (peor 0.07 %).
+
+**Hallazgos sobre las entregas (14), verificados con una réplica literal del bloque MATLAB:**
+- En los integrandos de Traub $C_l$ divide: a 50 m/s el par vale −4.7×10⁵ N·m. Esa singularidad es el "límite de 60 m/s" que el manuscrito atribuye a la física.
+- Otros errores del bloque Traub:
+  - la pérdida de punta multiplica por sin β;
+  - el ajuste de grado 2 se integra como recta con los coeficientes cruzados;
+  - σ se aplica en radianes, así que el modelo de pérdida no actúa;
+  - R = 0.9 m en el código frente a 1.193 m en el artículo;
+  - la torsión crece hacia la punta.
+- α_st de XFOIL de 4.6–6.1° y ajustes de grado 6 que divergen fuera de rango.
+- Etapa 3 del compresor un 32 % menor que la necesaria: se estrangula a 3.25 kg/s.
+- Misión simulada desde 0 m: en El Dorado (2548 m) el despegue queda limitado por Ng con 2.76 kN·m (91 %).
+- Ng de 45 000–47 000 rpm, por encima del máximo del TCDS (39 000).
+- η_th del 40 %, cuando sus propios datos dan 21 %.
+- Ecuación térmica rotulada como "propulsiva".
+- −18 % de par con biodiésel 50/50, artefacto del combustible en lazo abierto: el modelo da −8 % en lazo abierto, y en lazo cerrado conserva el par con +6.9 % de combustible.
+- LHV inconsistente (43.1 frente a 43.2).
+
+**Gotchas de modelado (reutilizables):**
+1. **Energía de la carta.** La carta de P&WC no cierra la energía con T4 = 1070 °C e ITT = 738 °C si todo el aire pasa por la llama. Mezclar el enfriamiento *después* del rotor no cambia T5, porque la energía se conserva. Hay que diluir *antes* del rotor (ε ≈ 11 %).
+2. **Etapas axiales.** Las incidencias y desviaciones de diseño son datos (ASME), no parámetros: con incidencia cero la etapa 1 no hace trabajo.
+3. **Hélice estática.** Con la cuerda de la entrega sin escalar, la hélice no absorbe 634 kW estáticos sin entrar en pérdida (empuje que *cae* con la potencia). El polinomio de cuerda estaba escrito para R = 0.9 m.
+4. **Discontinuidades del control.** Topes, saturaciones y antiwindup con `if` colapsan el paso de LSODA: la misión no avanzaba en 6 min. Suavizar con tanh, softmin y antiwindup por retro-cálculo deja la misión en 160 s.
+5. **Lazo del piloto.** Con Kq = 0.6 entra en ciclo límite durante el rodaje con la hélice en tope bajo; con 0.15 queda estable.
+6. **Paso estacionario.** El par de la hélice no es monótono en pérdida profunda: buscar la *primera* raíz en β creciente.
+
+**NB14 corregido:**
+- Datos nominales del TCDS (37 468 y 30 145 rpm, 15.07:1, 634 kW); caudal y T de llama del NB14a.
+- **Se eliminó el rozamiento artificial k_wind:** el equilibrio del eje viene de que el par del compresor crece con ω².
+- **La hélice usa la geometría McCauley en lugar de una tabla de hélice marina.** Además había un **error de signo propio** en el BET ($\alpha=\phi-\beta$): una pala en molinete daba empuje.
+- k_prop es coherente con la turbina: el equilibrio cae exactamente en 30 145 rpm, antes caía en 26 440.
+- Referencias de figuras, LaTeX roto e "isotrópico" corregidos; prosa redundante condensada, 6267 → 4902 palabras (−21.8 %).
+- Nota honesta: el modelo de densidad constante da PR 3.7, contra 7.6 real.
+
+## 2026-11-18 (implementación) — NB15b (planta termoeléctrica integrada) terminado
+
+**Archivo:** `notebooks/15b_Bonus_Planta_Termoeléctrica_Integrada.ipynb` (64 celdas, 10 widgets, 6 TikZ en `docs/figures/tikz/planta_*.tex`).
+
+**Decisiones del profesor sobre el plan:** la mención a un "motor reciprocante de ignición por chispa" era un error de plantilla, y el pedido es la planta termoeléctrica. Se aprobó la configuración (a): ciclo combinado SGT-800 como planta validada, más el hogar de biomasa EFB/PMF como configuración B. La Fig. 10 de Åström y Bell es la validación dinámica principal y el número del cuadernillo es 15b.
+
+**Modelo:** 36 EDO, con LSODA y propiedades tabuladas de CoolProp. Una evaluación del lado derecho cuesta 0.46 ms. Integrar las 24 h del día típico toma unos 130 s, y los 16 escenarios se guardan en `notebooks/data/planta_resultados.json`.
+- **Cuasi-estáticos:**
+  - turbina de gas por etapas, con gas real (aire de CoolProp y productos de Cantera) y mapa de carga parcial IGV/TIT a 15, 25 y 35 °C;
+  - turbina de vapor (Stodola) y bomba;
+  - presión del condensador, cuya constante de tiempo calculada es de 4 ms.
+- **EDO:**
+  - metal del sobrecalentador y del economizador, con 10 celdas en contraflujo cada uno;
+  - domo de Åström-Bell escalado por semejanza;
+  - pared y agua del condensador;
+  - ecuación de oscilación de la red con estatismo, AGC y gobernador del resto del sistema;
+  - controles: carga de planta, válvula de la TV (presión deslizante o reserva estrangulada), nivel de 1 o 3 elementos y, en biomasa, "caldera sigue" o "turbina sigue" con carbonizado ($\tau_{char}$ = 90 s).
+
+**Validación:**
+- **V1, SGT-800:** η 41.02 % frente a 41.1 % (−0.20 %) y heat rate +0.21 %. TIT (1338 °C equivalentes) y η_pt (0.878) se calibraron contra P y T₈; la eficiencia es una predicción.
+- **V2, P16-G16 (datos de planta digitalizados de la Fig. 10):**
+  - Presión: RMS de 0.065 MPa (0.75 %). Se calibraron 2 parámetros, como hicieron los autores: escala combustible→calor y K_v.
+  - Swell: signo correcto en 21/21 escalones (correlación 0.96); amplitud +4.5 cm frente a +3.2 cm medidos.
+  - La deriva lenta del nivel no se compara, porque el caudal de agua de alimentación (corregido a mano por el operador) no está publicado.
+- **V3:** η neta del CC 56.2 %, dentro de la banda SCC-800 1x1 (53.8-58.0 %). $P_{CC}/P_{TG}$ queda un 3.1 % bajo: es una HRSG de una sola presión.
+- **V4:** T_ad estequiométrica CH₄-aire de 2225 K frente a 2226 K (Turns).
+- **8 verificaciones < 1 %** (la peor, la 1.ª ley global, 0.58 %).
+
+**Hallazgos en la entrega** (7, todos documentados en el cuadernillo y en la §12):
+1. La velocidad axial se calcula con la densidad de entrada en las 15+3 etapas. Con la geometría de la entrega y la densidad real, $c_a$ cae de 93 a 18 m/s, cuando la entrega reporta 132 m/s.
+2. Las propiedades aproximadas del agua (−13 % en q) ocultan una violación del pinch: 21.68 kg/s requieren 70.7 MW.
+3. Las constantes de tiempo están impuestas (100/80 s). Las calculadas son: metal de la HRSG 120 s, agua del condensador 3.7 s y pared 0.7 s.
+4. Se usó diésel, cuando el fabricante reporta con gas natural.
+5. La bomba da ~50 m de columna y el domo de 12 MPa exige 1235 m: hacen falta 27 rodetes a 2200 rpm o 5 a 5500 rpm.
+6. La punta del último álabe de la TV iría a 1182 m/s.
+7. La densidad de gas ideal en la TV tiene un error de hasta 22 % (en la zona húmeda).
+
+**Gotchas técnicos encontrados (patrones reutilizables):**
+1. **Bilineal a través del domo de saturación.** Interpolar h(p, T) en una rejilla que cruza la curva de saturación da basura justo a la entrada del sobrecalentador y a la salida del economizador. El "estacionario" de diseño tenía dp/dt = −8.5 kPa/s. Se resolvió tabulando por fase en $\theta=|T-T_{sat}(p)|$.
+2. **Unidades W frente a MW** en dos sitios: integrador del controlador de planta y sesgo del AGC. El segundo multiplicaba la ganancia integral por 10⁶. Lo detectó un rastreo con Euler explícito; un análisis de Routh confirmó que el sistema continuo era estable.
+3. **Signo del swell en el modelo de Åström-Bell.**
+   - Con $m_d=m_t-m_r$ el swell sale **con el signo invertido**: la condensación por calentar el metal del domo tapa el *flash*. Con $m_d$ = 0 (el informe no da $m_d$) el signo es correcto en 21/21 escalones.
+   - Hace falta además una $m_t$ efectiva de 529 t (el informe declara 300 t) para reproducir las tasas de presión de sus propias Figs. 4-5; sus ajustes cuadráticos de propiedades difieren de CoolProp.
+   - El texto (p. 18) y el apéndice A del informe dan parámetros distintos (k = 25 frente a 200, A_d = 20 frente a 23).
+4. **Red concentrada del condensador** con temperatura media aritmética del agua: a NTU ≈ 2.4 el estacionario se desvía **20 %** del método ε-NTU (la verificación lo detectó). Se corrigió con una conductancia equivalente $G_{eq}$ (6.2 frente a 10.7 MW/K).
+5. **Control de 3 elementos:** el anticipativo debe ser el vapor **total** que sale del domo, incluidas las válvulas de seguridad. Con solo el de la turbina, un disparo de la TV corta el agua mientras las válvulas descargan, y el nivel cae a −58 cm.
+6. **Lazo de nivel con realimentación positiva en domos de baja presión** (biomasa, 3 MPa): más agua fría condensa vapor bajo la superficie, el nivel baja y el controlador pide más agua. Con 50 %/0.1 m el lazo se dispara. Se resolvió con 20 %/0.1 m, T_i = 200 s y límite de capacidad de la bomba (1.5 veces el caudal de diseño).
+7. **Economizador con 4 celdas metálicas:** el diseño (pinch + approach = 20 K) es infactible porque la caída de gas por celda supera el approach. Se usan 10 celdas.
+8. **Biomasa en isla con «turbina sigue».** La revisión visual del tablero mostró la frecuencia oscilando entre 15 y 100 Hz: no había *antiwindup* y la ganancia de estatismo sobre el combustible era demasiado alta.
+   - Se agregó *antiwindup* y el estatismo pasó a la válvula, que regula presión con sesgo de frecuencia.
+   - Aun así, el combustible (20 s de alimentación más 90 s de carbonizado) no sostiene una isla de 10 MVA con H = 4 s. Es un resultado físico, no un defecto de ajuste.
+   - Se modeló la **protección de frecuencia (57.5-62.5 Hz)**: el tablero corta la simulación en el disparo y lo explica. La lección es que las islas se operan con el gobernador sobre la válvula.
+   - La η instantánea se oculta («transitorio») cuando el transitorio consume energía almacenada: llegó a mostrar 110 %.
+9. Las funciones de los widgets se probaron llamándolas directamente (31 casos, 0 fallos) además de ejecutar el cuadernillo en un kernel real (34 s con caché, 0 errores). Sin caché, integrar los 16 escenarios toma ~30 min, en su mayoría el caso de biomasa en isla que dispara.
+
+**Métricas:** prosa 11 307 → 3561 palabras (−68.5 % frente a la entrega), 10 ecuaciones en display, 25 llamadas directas a CoolProp (más las tablas) y 14 figuras más 6 TikZ.
+
+## 2026-11-18 — Plan del NB15b (planta termoeléctrica integrada, dinámica en el tiempo), en espera de aprobación
+
+- **Fuentes:**
+  - `EntregasCurso/PlantaTermoeléctrica.ipynb` (Sánchez, Aparicio, Roa): ciclo combinado SGT-800 + caldera serpentín + Rankine. Incluye triángulos de Euler por etapa (15+3 etapas de TG, 30 de TV), bomba centrífuga, condensador de coraza y tubos, transitorios y análisis paramétrico.
+  - `Biofuels Combustion` (Arias-Guerrero et al.): cinética EFB/PMF y caldera de 30 t/h, 10–30 bar.
+- **Hallazgos verificados (CoolProp) en la entrega:**
+  1. Las propiedades del agua aproximadas (cp constante, Watson, Antoine) subestiman el calor de caldera: 2841 contra 3256 kJ/kg a 12 MPa/540 °C, un 13 % menos.
+  2. Con el flujo de 21.68 kg/s la caldera requeriría 70.6 MW, pero los gases solo entregan 61.6 MW. Un análisis de pinch (20 K) da 19.1 kg/s y una chimenea a 179 °C. El modelo concentrado de la entrega no detecta la violación interna del pinch.
+  3. Las constantes de tiempo transitorias (τ = 100 s en la caldera, 80 s en el condensador) se imponen; no se derivan de la inercia térmica.
+  4. La TG se alimenta con diésel, pero los datos del fabricante corresponden a gas natural.
+- **Datos de validación encontrados:**
+  1. Ficha y póster SGT-800 de Siemens Energy (calificación de 62 MW): η = 41.1 %, Π = 21.1, 135.5 kg/s, 596 °C. Ficha SCC-800 1×1: η neta de 53.8–58.0 %.
+  2. Åström y Bell, *Drum-Boiler Dynamics* (TFRT-7577, 1998; Automatica 2000). Aporta los parámetros de la unidad P16-G16 de 160 MW (Apéndice A) y la Fig. 10: datos de planta frente al modelo para escalones de combustible a carga media, con presión de 7.5–9 MPa y nivel de ±0.1 m.
+- **Decisión pedagógica propuesta:**
+  - Reemplazar los τ impuestos por EDO físicas: metal del HRSG, domo de Åström–Bell con 4 estados, condensador con 3 EDO, y rotores + red con la ecuación de oscilación.
+  - Tratar las turbomáquinas como cuasi-estáticas (Euler por etapa).
+  - Conducir la planta con la demanda de la red mediante gobernador, AGC y control coordinado.
+  - 6 diagramas TikZ en `docs/figures/tikz/planta_*.tex`; 9 widgets propuestos, uno de ellos el tablero global.
+
+## 2026-11-17 (implementación) — NB10c (diésel integrado) terminado y NB11b (Wankel 4T/6T) reconstruido
+
+### NB10c — `notebooks/10c_Bonus_Motor_Diesel_Turbo_Intercooler.ipynb` (55 celdas, 10 widgets, 5 TikZ)
+- **Motor de validación cambiado a pedido del profesor** ("uno al que tengas acceso completo"): ECN Sandia small-bore (culata GM 1.9 L), con geometría, válvulas, inyector y presión, inyección y AHRR medidas en 3 avances del punto CDC9. Paquete compacto en `notebooks/data/ecn_sb/`.
+- **Química:** n-heptano de Yoo, Lu, Chen y Law (2011; 88 especies), elegido con datos. Su NC (56) es cercano al del DPRF58 (58), y su retardo coincide con el medido del piloto; el n-dodecano enciende entre 2 y 3 veces más rápido.
+- **Modelo:** una zona de aire más una zona de chorro por cada inyección. Arrastre de Hiroyasu con penetración de Naber-Siebers y $S_w$ = 26 mm (perfil del bowl). El chorro principal arrastra productos del piloto. Calibración por etapas: $V_c$ con el ensayo sin combustión, $T_{IVC}$ con la $T_{PMS}$ publicada, $C_{ent}$ con el retardo del piloto y $C_w$ con el pico de HRR, todo en SSE−7.
+- **Validación independiente** en SSE−17 y SSE+2: $p_{max}$ ±0.9 %, rms 1.6-2.1 bar. IMEPg +7-9 %: la AHRR medida suma solo el 91 % de la energía del combustible, por las pérdidas del motor óptico.
+- **Curva de un 4 cilindros metálico:** 116 kW y 307 N·m frente al Z19DTH de producción (110 kW, 320 N·m), es decir +5.6 % y −4.2 %, sin ajuste.
+- **Entrega estudiantil:** reproducida exactamente; las 4 inconsistencias se documentaron en el cuadernillo.
+- **11 verificaciones < 1 %.**
+
+### NB11b — `notebooks/11b_Bonus_Motor_Wankel.ipynb` reconstruido (29 → 43 celdas, 3 → 8 widgets, 4 TikZ)
+- **Geometría exacta** (trocoide generalizada, rotor por envolvente para 3, 4 y 5 caras): $V(\theta)$ **exactamente senoidal** y $V_H$ del 12A con error de 0.02 % frente a 573 cc.
+- **Par vectorial frente a balance de potencia:** 0.004 %. Se elimina el factor de calibración 1/6 de la versión anterior; su causa era mezclar el ángulo del rotor con el del eje.
+- **Validación con Yamamoto (1981), Mazda 12A:** se calibra solo con la presión de la Fig. 4.11. Sin más ajustes, el **par por cámara** queda en +1.0 % y el **par medio** en −2.5 % (Fig. 4.12). La curva a plena carga (Fig. 4.3) no se reproduce en magnitud; se presenta como análisis inverso del llenado, y se señala la ambigüedad de la FMEP de la Fig. 4.1.
+- **6T con contabilidad energética completa** (pedido explícito del profesor): η neta del 4T 0.344, frente a 0.090 (A), 0.249 y 0.266 (B, con pared a 420 y 700 K) y 0.185 (C).
+  - La penalización dominante es la pérdida de calor de las carreras extra (42-56 % de $Q_f$).
+  - El caso C emite 485 g/kWh de CO, porque el gas purgado no cabe entero al readmitir.
+  - Las η del TG violan el límite Otto de su propio $r_c$.
+- **10 verificaciones < 1 %.**
+
+### Gotchas de esta sesión
+1. `nbconvert --execute` y `nbclient` se bloquean (kernel ocioso) en las celdas con widgets en este entorno, aunque las mismas celdas corren en un kernel crudo. Se escribió `exec_kernel.py` (jupyter_client + `output_from_msg`): NB10c corre en 28 s y NB11b en 14 s.
+2. Un núcleo de zona quemada de $10^{-4}$ del volumen **se apaga** (quench) cuando la compresión es baja o la combustión muy corta; con $3\times10^{-3}$ es robusto.
+3. `pkill -f patrón` en un comando que contiene ese patrón mata la propia shell (exit 144); ocurrió 3 veces.
+4. Las funciones de los widgets deben probarse **llamándolas directamente** (50 llamadas en total), porque los errores dentro de `interactive_output` no aparecen como error de celda.
+
+## 2026-11-17 — Plan de reconstrucción del NB11b (Wankel completo, 4T y 6T), en espera de aprobación
+
+- **Fuentes leídas:**
+  - `Wankel/main_Wankel4Strokes.tex` (Rojas Barón, Bayona Roa, Lemus Figueroa y Garzón Olaya): geometría, ciclo ideal, modelo One-Zone en Cantera (13B a 2750 rpm), par vectorial y comparación con el AIE 650S. Las secciones de dos zonas (2.3.2 y 2.3.3) están vacías.
+  - `Wankel/main.tex`, TG253015 (Rojas Barón y Serpa Páez): Wankel de 6 tiempos con trocoide generalizada ($N_r=N_e+1$, $\kappa=1/N_r$) y casos A (supercargador), B (agua) y C (válvula de expansión).
+  - Yamamoto, *Rotary Engine* (1981), escaneado en `libros/`. Contiene las ecuaciones exactas de volumen y compresión (2.27-2.31) y, para el **Mazda 12A** (573 cc × 2), la presión y el par por cámara (Fig. 4.11), el par medio de 16.5 kg·m (Fig. 4.12), las curvas a plena carga (Fig. 4.3) y la FMEP (Fig. 4.1). Se adopta como **motor de validación**.
+- **Hallazgos verificados numéricamente:**
+  1. El término constante de $V_i(\theta)$ en el artículo solo coincide con la geometría exacta de Yamamoto cerca de $K=R/e\approx3.9$ (G3: CR 9.61 frente a 9.54). Para G1 da CR 6.4 frente a 11.9 teórica, y para motores reales ($K=7$: 12A y 13B) da CR 3.4 frente a 18.3 teórica. El CR real (9.4) requiere el bolsillo del rotor (~35 cc).
+  2. Con G3 y $W$ = 30 mm la cilindrada por cámara es 353 cc, no los 650 cc del AIE 650S; harían falta $W$ = 55.2 mm.
+  3. El One-Zone del artículo da CA10-90 = 1.6°, una explosión volumétrica provocada por el pulso térmico de ignición. Hace falta propagación de llama (dos zonas, lo que el manuscrito deja pendiente).
+  4. Las eficiencias indicadas de los 6T del TG superan el límite Otto con el mismo $r_c$: caso C 68.3 % frente a 40.9 %, caso A 50.9 % frente a 43.1 %, caso B 44.4 % frente a 43.1 %. Falta contabilizar trabajo externo (soplador, bomba) y la energía entrante.
+  5. El factor de calibración 1/6 del par en el NB11b actual tiene una causa identificable: el volumen de la fórmula está en ángulo de **rotor** y el par en ángulo de **eje** (periodo de $V$ = 540° de eje). El balance de potencia $\tau\omega_e=\sum p_i\dot V_i$ fija la amplitud sin calibrar.
+- **Diagramas TikZ creados:** `wankel_par_vectorial` (reemplaza "Torqueexplicado"), `wankel_camara_combustion`, `wankel_6t_secuencias` (reemplaza superch, agua, válvula, 3L4P y 4L5P) y `wankel_modelo_acoplado`.
+
+## 2026-11-17 — Plan del NB10c (motor diésel turbo + intercooler, modelo integrado), en espera de aprobación
+
+- **Fuentes leídas:** `EntregasCurso/MotorDieselIntercooler.ipynb` (Muñoz y Pedraza): compresor centrífugo por ecuación de Euler, intercooler ε-NTU (Dittus-Boelter y Hilpert), transitorio de primer orden con τ_IC = 30 s, cinética global de 2 pasos a T fija de 1200 K, combustibles ACPM B10 y palma 1G. También `Crank and Piston Dynamics/Informe Estática Entrega 3-1.pdf` (método de lazos y Newton-Euler, ya extraído para NB10b) y el material diésel de NB08, NB09, NB10, NB11, NB12 y NB17.
+- **Inconsistencias verificadas numéricamente en la entrega diésel:**
+  1. La eficiencia isentrópica implícita del compresor es 0.59, frente a η_C = 0.80 declarada. La causa: T2 = T1 + Ẇ_Euler/(ṁ c_p η_C) cuenta las pérdidas dos veces, y el Δp sale de la altura ideal incompresible.
+  2. El texto describe un intercambiador de flujo cruzado, pero el código usa la ε de carcasa y tubos de 1 paso. La diferencia es ≤0.36 % con C_r ≈ 0.09: menor, pero conceptual.
+  3. Hay dos ṁ_h distintos (§7-9 frente a §10), y para el mismo diseño N_p = 6 se reportan T3 = 361.9 K y 372.3 K.
+  4. Con la química a T fija, el intercooler solo actúa a través de la concentración de O2. El efecto dominante no puede aparecer: menor T al final de la compresión, mayor retardo de ignición, más premezcla y menos NOx.
+- **Pruebas previas de viabilidad:**
+  - Mecanismo de n-dodecano de Yao, Lu et al. (2017; 53 especies y 268 reacciones, PelePhysics `dodecane_lu`): 18 igniciones en ~1.1 s, viable en Colab. Muestra un NTC marcado que hay que validar contra Vasu et al. (2009).
+  - El mecanismo `ndodecane_35` de PelePhysics viene sin reacciones (es para su formato QSS), así que se descartó.
+- **Motor de referencia propuesto:** Toyota 1GD-FTV (Hilux/Fortuner): 92 × 103.6 mm, r = 15.6, 2755 cc, 130 kW a 3400 rpm, 450 N·m a 1600-2400 rpm (ficha oficial de Toyota, 2015).
+- **Diagramas TikZ creados** en `docs/figures/tikz/`: `diesel_biela_manivela`, `diesel_dcl`, `diesel_sistema_turbo` (reemplaza DIAGRAMA.png de la entrega), `diesel_chorro` (modelo conceptual de chorro tipo Dec 1997 y su abstracción 0D de dos zonas) y `diesel_modelo_acoplado`.
+- **Lección de NB10b aplicada desde el diseño:** caché precalculada y `RECALCULAR`, con meta de ejecución <2 min en Colab.
+
+## 2026-11-13 — NB10b reconstruido como modelo del motor VCR completo (mecanismo + química detallada + curva de potencia)
+
+- **Módulo:** `notebooks/10b_Bonus_Mecanismo_Compresion_Variable.ipynb` (22→47 celdas). Por decisión del profesor se fusionó aquí el plan "motor completo" en lugar de crear un 11c. Fuentes: `Crank and Piston Dynamics/Informe Estática Entrega 3-1.pdf` (Alarcón y Chilatra, 2025) y `EntregasCurso/MotorOttoTurbo.ipynb` (Belalcázar et al., 2026). El ejercicio original se conserva como ejercicio de extensión n.º 1, ahora con solución de referencia en §6.
+- **Geometría calibrada contra datos publicados:** se recalibraron las longitudes de los eslabones por mínimos cuadrados contra el Nissan VC-Turbo KR20DDET (carrera 90.1/88.9 mm a r=8/14, diámetro 84 mm). La cilindrada de 4 cilindros reproduce 1997.7/1971.2 cc frente a 1997/1970 cc, con errores de 0.035 % y 0.063 %; ese dato no se usó en el ajuste. Hallazgo no buscado: el 2.º armónico de la aceleración del pistón es el 1-6 % del 1.º, frente al 31 % de una biela clásica. Esto explica que Nissan pudiera eliminar los ejes de balance.
+- **Química ("el mejor modelo disponible que corra en Colab"):** Cantera 3.2 con el mecanismo esquelético de iso-octano de Yoo, Luo, Lu, Kim y Chen (2013; 143 especies, 1178 reacciones). El modelo es de dos zonas: quemada y gas final, con la química del gas final integrada como EDO en el tiempo. Combustión con ley de Wiebe, transferencia de calor con Woschni y detonación detectada por autoencendido del gas final. Calcula el KLSA, el mapa VCR y la curva de par y potencia contra rpm con la estrategia de la ECU (límite de 380 N·m y una sola calibración de la presión de admisión: 2.152 bar).
+- **Gotchas que costaron iteración:** (1) al inicializar los residuales en equilibrio HP aparecían radicales que provocaban detonación espuria en todos los casos; se resolvió equilibrando a TP 1000 K. (2) Los callbacks Python que llamaban a la cinemática dominaban el costo; se resolvió con tablas e interpolación escalar. (3) Con combustiones de 2° se apaga el núcleo de la zona quemada, un límite numérico; la verificación usa 4°.
+- **Problema de rendimiento reportado por el profesor (local y Colab, "se queda ejecutando"):** el cuadernillo recalculaba unos 200 ciclos con química detallada a ~8 s cada uno. El perfilado mostró que el 97 % del costo está dentro del integrador CVODES (~97k evaluaciones del lado derecho por ciclo). Reducir los pasos de salida (dphi), apagar la química o cambiar el precondicionador dio ganancias marginales (10-30 %), así que la solución fue arquitectónica:
+  - resultados precalculados en `notebooks/data/vcr_resultados.json`, que el bootstrap descarga desde GitHub, con la opción `RECALCULAR = False`;
+  - los ensayos de chispa se interrumpen en cuanto se detecta detonación;
+  - caché de Woschni, y mapa y curva con menos puntos.
+  
+  Tiempos medidos: el recálculo completo cuesta 27 min de CPU local. Con caché, las celdas suman ~115 s; la más lenta es W3, con 47 s de retardos de ignición en vivo. En la máquina del profesor el tiempo de pared fue mucho mayor por contención de CPU y memoria ajena al cuadernillo.
+- **Afirmaciones de prosa corregidas tras ver los resultados:**
+  - "r=14 pierde casi la mitad del par" era falso. r=14 solo pierde par a ≤2000 rpm (285 frente a 380 N·m). A alta rpm no detona, pero llega a una presión pico de 140-180 bar: el límite pasa a ser estructural.
+  - "C_s de unas décimas" era falso: con 4 cilindros es de 2.5-5 %.
+- **Inconsistencia hallada en la entrega MotorOttoTurbo:** la entrega usa c_v = 750 J/kg K con R/(k−1) = 957, lo que produce una discrepancia del 27.6 % entre el balance de energía y ∮p dV. El cuadernillo reporta ambas versiones.
+- **Verificación (9 checks, todos <1 %):** cilindrada (0.035/0.063 %), jacobiano (0.000 %), Newton-Euler frente a energía (0.000 %), cierre de 1.ª ley (0.029 %), límite fuel-air (0.069 %), LHV frente a 44.3 MJ/kg (0.81 %), cp⁰ de los productos frente a CoolProp (0.15 %), par medio frente a ∮p dV/4π (0.023 %) y Otto de la entrega (0.0003 %). Predicción no forzada: 218.5 kW a 5600 rpm frente a 200 kW de Nissan (+9.2 %). La desviación se atribuye a η_v ideal y a no modelar la contrapresión de la turbina ni el enriquecimiento.
+- **Diagramas:** 5 TikZ standalone en `docs/figures/tikz/` reemplazan las figuras a mano del informe: mecanismo vectorial, lazos, DCL, modelo acoplado y dos zonas.
+- **Métricas:** 47 celdas; 9 widgets, entre ellos el widget bandera del motor en movimiento carrera por carrera; 5 llamadas CoolProp; prosa de 1560 a 3044 palabras. Es una ampliación deliberada, no una reducción: es un módulo de frontera que fusiona dos planes. Registrado en `docs/metrics.csv`.
+
 ## 2026-11-05 — Lección 15 original transformada: Ciclos de Refrigeración (NB18)
 
 - **Módulo:** `notebooks/18_Lección_Ciclos_de_Refrigeración.ipynb`, derivado de `notebooks_originales/15_Lección_Ciclos_de_Refrigeración.ipynb` (45 celdas, **100% markdown, sin ninguna celda de código**, 4763 palabras — a diferencia de NB16/17, aquí no había ningún modelo previo que corregir o reutilizar; todo el código se construyó desde cero). Prosa íntegra conservada (4763→5705 palabras); declaración de autor intacta. Sin `research_sources/` aplicable.

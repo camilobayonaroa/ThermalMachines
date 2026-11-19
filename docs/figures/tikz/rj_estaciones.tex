@@ -1,0 +1,49 @@
+% NB14b -- Ramjet axisimetrico con cono (spike): sistema de choques, estaciones y zonas del modelo.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,positioning,decorations.pathmorphing}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{frio}{HTML}{2A78D6}
+\definecolor{caliente}{HTML}{E34948}
+\definecolor{tibio}{HTML}{EB6834}
+\definecolor{choque}{HTML}{4A3AA7}
+\begin{tikzpicture}[x=1cm,y=1cm, tag/.style={font=\scriptsize\itshape, text=tinta!75}, est/.style={font=\footnotesize\bfseries}]
+  % eje
+  \draw[tinta!40, dash dot] (-1,0) -- (16.5,0);
+  % cono (spike)
+  \fill[metal!70] (0,0) -- (3.2,1.49) .. controls (4.4,1.9) and (5.4,1.6) .. (6.6,0.0) -- cycle;
+  \fill[metal!70] (0,0) -- (3.2,-1.49) .. controls (4.4,-1.9) and (5.4,-1.6) .. (6.6,0.0) -- cycle;
+  \draw[tinta, line width=0.9pt] (0,0) -- (3.2,1.49) .. controls (4.4,1.9) and (5.4,1.6) .. (6.6,0.0);
+  \draw[tinta, line width=0.9pt] (0,0) -- (3.2,-1.49) .. controls (4.4,-1.9) and (5.4,-1.6) .. (6.6,0.0);
+  % carcasa
+  \foreach \s in {1,-1}{
+    \draw[tinta, line width=2pt] (3.0,\s*2.6) .. controls (4.5,\s*2.9) and (5.5,\s*3.0) .. (7.0,\s*3.0) -- (11.2,\s*3.0)
+       .. controls (11.9,\s*3.0) and (12.2,\s*2.6) .. (12.8,\s*2.6) .. controls (13.6,\s*2.6) and (14.8,\s*3.1) .. (15.6,\s*3.25);
+  }
+  % choque conico y terminal
+  \draw[choque, line width=1.3pt] (0,0) -- (3.0,2.6);
+  \draw[choque, line width=1.3pt] (0,0) -- (3.0,-2.6);
+  \draw[choque, line width=1.6pt, decorate, decoration={zigzag, segment length=3, amplitude=1.2}] (3.25,1.55) -- (3.25,2.62);
+  \draw[choque, line width=1.6pt, decorate, decoration={zigzag, segment length=3, amplitude=1.2}] (3.25,-1.55) -- (3.25,-2.62);
+  \node[tag, choque, anchor=north west] at (0.9,-1.2) {choque c\'onico $\beta$};
+  \node[tag, choque, anchor=west] at (3.35,2.2) {choque terminal};
+  % estabilizadores
+  \foreach \y in {0.85,1.6,-0.85,-1.6}{ \draw[tinta, line width=1.2pt] (7.6,\y+0.18) -- (7.25,\y) -- (7.6,\y-0.18); }
+  \fill[caliente!25] (7.6,1.6) -- (11.2,2.95) -- (11.2,-2.95) -- (7.6,-1.6) -- cycle;
+  \node[tag, caliente!70!black] at (9.6,0.4) {frente turbulento};
+  \node[tag] at (7.4,-2.3) {estabilizadores en V};
+  % flechas de flujo
+  \draw[-{Stealth[length=2.5mm]}, frio, line width=1.4pt] (-1.2,1.8) -- (0.4,1.8) node[above, tag, pos=0.3] {$M_\infty$};
+  \draw[-{Stealth[length=2.5mm]}, caliente, line width=1.4pt] (15.7,1.0) -- (16.8,1.0);
+  % estaciones
+  \foreach \x/\l in {-0.6/\infty, 3.25/1, 6.8/2, 7.7/3, 11.2/4, 12.8/5, 15.6/6}{
+    \draw[tinta!60, densely dashed] (\x,-3.6) -- (\x,3.6);
+    \node[est] at (\x,3.9) {$\l$};
+  }
+  \node[tag] at (1.6,-3.9) {compresi\'on por choques};
+  \node[tag] at (5.0,-3.9) {difusor subs\'onico};
+  \node[tag] at (9.4,-3.9) {c\'amara (EDO en $x$)};
+  \node[tag] at (14.2,-3.9) {tobera C-D ($M_5=1$)};
+\end{tikzpicture}
+\end{document}

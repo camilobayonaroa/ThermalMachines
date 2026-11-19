@@ -1,0 +1,33 @@
+% NB14b -- Arquitectura del modelo acoplado del ramjet.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{frio}{HTML}{2A78D6}
+\definecolor{caliente}{HTML}{E34948}
+\definecolor{choque}{HTML}{4A3AA7}
+\definecolor{verde}{HTML}{1BAF7A}
+\definecolor{tibio}{HTML}{EB6834}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  b/.style={draw=tinta, line width=0.9pt, rounded corners=2pt, align=center, font=\footnotesize, minimum height=14mm, text width=31mm, fill=white},
+  ode/.style={b, line width=1.6pt, fill=frio!8},
+  s/.style={-{Stealth[length=2.2mm]}, line width=1pt},
+  tag/.style={font=\scriptsize\itshape, text=tinta!75}]
+  \node[b, fill=frio!5] (atm) at (0,3) {\textbf{Atm\'osfera ISA}\\$M_\infty,\,h$};
+  \node[b, fill=choque!12] (toma) at (4.2,3) {\textbf{Toma}\\cono (Taylor--Maccoll)\\+ choque terminal};
+  \node[ode] (dif) at (8.4,3) {\textbf{Difusor subs\'onico}\\EDO en $x$: \'area + fricci\'on};
+  \node[ode, fill=caliente!8] (cam) at (12.6,3) {\textbf{C\'amara}\\EDO en $x$: calor (Rayleigh)\\+ fricci\'on, $\gamma(x)$};
+  \node[b, fill=caliente!15] (tob) at (12.6,0) {\textbf{Tobera C-D}\\expansi\'on real (Cantera)\\congelada / equilibrio};
+  \node[b, fill=verde!15] (emp) at (8.4,0) {\textbf{Empuje}\\$F_N,\,I_{sp}$, TSFC};
+  \node[ode, fill=verde!10] (llama) at (12.6,6) {\textbf{Llama} (cin\'etica)\\PSR en $t$ (apagado),\\$S_L$ (FreeFlame) $\to S_T$};
+  \node[b, dashed, fill=tibio!10] (acople) at (4.2,0) {\textbf{Acople}: posici\'on del\\choque o derrame tal que\\$\dot m_g=\dot m_{garganta}$};
+  \node[ode, fill=choque!8] (zum) at (0,0) {\textbf{Din\'amica} (EDO en $t$)\\zumbido tipo Greitzer\\trayectoria del veh\'iculo};
+  \draw[s] (atm) -- (toma); \draw[s] (toma) -- node[above, tag] {$p_{02}$} (dif); \draw[s] (dif) -- node[above, tag] {$M_3$} (cam);
+  \draw[s] (cam) -- node[right, tag] {$p_{04},T_{04}$} (tob); \draw[s] (tob) -- node[above, tag] {$u_6,p_6$} (emp);
+  \draw[s] (llama) -- node[right, tag] {$b(x),\eta_b$} (cam);
+  \draw[s, dashed] (tob.south) -- ++(0,-0.6) -| node[pos=0.2, below, tag] {capacidad de la garganta} (acople.south);
+  \draw[s, dashed] (acople) -- node[left, tag] {$z$} (toma);
+  \draw[s, dashed] (acople) -- (zum);
+\end{tikzpicture}
+\end{document}
