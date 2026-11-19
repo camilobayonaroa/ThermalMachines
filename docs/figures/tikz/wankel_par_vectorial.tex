@@ -1,0 +1,69 @@
+% NB11b -- Mecanica vectorial del Wankel: (a) fuerza de presion sobre un flanco y par en el eje excentrico,
+% (b) engranaje de sincronizacion (corona fija r1 = 2e, pinon del rotor r2 = 3e) que impone omega_r = omega_e/3.
+% Reemplaza la figura "Torqueexplicado" (dibujada a mano) de Rojas Baron et al. (manuscrito Wankel 4T).
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,angles,quotes}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{gasc}{HTML}{E34948}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % ---------------- (a) ----------------
+  \def\R{3.0}\def\e{0.55}\def\th{40}   % escala de dibujo (K = R/e ~ 5.5 para que se vea la excentricidad)
+  \node[lbl, font=\bfseries, anchor=west] at (-4.2,4.3) {(a) Fuerza de presi\'on y par en el eje exc\'entrico};
+  % estator (epitrocoide de 2 lobulos)
+  \draw[tinta, line width=1.3pt, domain=0:360, samples=200, smooth] plot ({\R*cos(\x)+\e*cos(3*\x)}, {\R*sin(\x)+\e*sin(3*\x)});
+  % centro del rotor C (orbita de radio e) ; rotor gira th/3
+  \coordinate (O) at (0,0);
+  \coordinate (C) at ({\e*cos(\th)},{\e*sin(\th)});
+  \pgfmathsetmacro{\ar}{\th/3}
+  \coordinate (A1) at ($(C)+({\R*cos(\ar)},{\R*sin(\ar)})$);
+  \coordinate (A2) at ($(C)+({\R*cos(\ar+120)},{\R*sin(\ar+120)})$);
+  \coordinate (A3) at ($(C)+({\R*cos(\ar+240)},{\R*sin(\ar+240)})$);
+  % camara de trabajo entre A1 y A2 (gas)
+  \fill[gasc!18] (A1) to[bend left=14] (A2) -- cycle;
+  \draw[superior, line width=1.6pt] (A1) to[bend right=10] (A2) to[bend right=10] (A3) to[bend right=10] (A1);
+  \node[lbl, gasc, font=\small] at ($(A1)!0.5!(A2)+({0.55*cos(\ar+60)},{0.55*sin(\ar+60)})$) {$p_1$};
+  \node[lbl, font=\small] at ($(A2)!0.5!(A3)+({0.6*cos(\ar+180)},{0.6*sin(\ar+180)})$) {$p_2$};
+  \node[lbl, font=\small] at ($(A3)!0.5!(A1)+({0.6*cos(\ar+300)},{0.6*sin(\ar+300)})$) {$p_3$};
+  % punto medio del flanco 1 y vectores
+  \coordinate (M) at ($(A1)!0.5!(A2)$);
+  \draw[vec, control] (O) -- (C) node[lbl, pos=0.5, below=4pt, control] {$\vec e$};
+  \draw[vec, inferior] (C) -- ($(C)!0.93!(M)$) node[lbl, pos=0.55, left, inferior] {$\vec r_1$};
+  % fuerza: normal al flanco, hacia el centro del rotor, linea de accion pasa por C
+  \draw[F] (M) -- ($(M)!0.62!(C)$) node[lbl, pos=0.35, right, fuerza] {$\vec F_1=p_1A_f\,\hat n$};
+  \draw[fuerza, dashed, line width=0.5pt] ($(M)!1.35!(C)$) -- (M);
+  \node[fijo] at (O) {}; \node[pin] at (C) {};
+  \node[lbl, below left] at (O) {$O$}; \node[lbl, above right=-1pt] at (C) {$C$};
+  \foreach \P/\n in {A1/1,A2/2,A3/3} \fill[tinta] (\P) circle (2.2pt);
+  \node[lbl, right] at (A1) {\'apice};
+  \draw[manivela!50, dashed] (O) circle (\e);
+  \node[lbl, align=left, anchor=north west, font=\small] at (-4.2,-3.4) {%
+    El empuje del gas es normal al flanco y su l\'inea\\ de acci\'on pasa por el centro del rotor $C$:\\
+    $\vec r_1\parallel\vec F_1\Rightarrow\vec r_1\times\vec F_1=0$, y queda\\[2pt]
+    $\tau_{eje}=\displaystyle\sum_{i=1}^{3}\vec e\times\vec F_i,\qquad |\vec F_i|=(p_i-p_{c\acute arter})\,\sqrt3\,R\,b$\\[4pt]
+    Verificaci\'on independiente (potencia): $\tau_{eje}\,\omega_e=\sum_i p_i\,\dot V_i$};
+  % ---------------- (b) ----------------
+  \begin{scope}[shift={(10.2,0.4)}]
+    \node[lbl, font=\bfseries, anchor=west] at (-3.0,3.9) {(b) Sincronizaci\'on: $\omega_r=\omega_e/3$};
+    \def\ee{0.8}
+    \coordinate (O2) at (0,0); \coordinate (C2) at ({\ee*cos(30)},{\ee*sin(30)});
+    % corona fija (radio 2e) y pinon del rotor (radio 3e, dentado interior) -- aqui: pinon fijo al bloque, corona en el rotor
+    \draw[manivela, line width=1.5pt] (O2) circle ({2*\ee});
+    \draw[superior, line width=1.5pt] (C2) circle ({3*\ee});
+    \foreach \a in {0,15,...,345} \draw[manivela, line width=0.6pt] ($(O2)+({2*\ee*cos(\a)},{2*\ee*sin(\a)})$) -- ++({0.12*cos(\a)},{0.12*sin(\a)});
+    \foreach \a in {0,10,...,350} \draw[superior, line width=0.6pt] ($(C2)+({3*\ee*cos(\a)},{3*\ee*sin(\a)})$) -- ++({-0.12*cos(\a)},{-0.12*sin(\a)});
+    \coordinate (P) at ($(O2)+({2*\ee*cos(210)},{2*\ee*sin(210)})$);
+    \fill[gasc] (P) circle (2.4pt); \node[lbl, left, gasc, font=\small] at (P) {contacto};
+    \node[fijo] at (O2) {}; \node[pin] at (C2) {};
+    \draw[cota] (O2) -- (C2) node[lbl, midway, above, font=\footnotesize] {$e$};
+    \node[lbl, manivela, font=\small] at (0.3,-2.75) {pi\~n\'on fijo al estator, $r_1=2e$ (azul)};
+    \node[lbl, superior, font=\small] at (1.2,3.1) {corona interior del rotor, $r_2=3e$};
+    \node[lbl, align=left, anchor=north west, font=\small] at (-3.0,-3.15) {%
+      Rodadura sin deslizamiento en el contacto ($v=0$):\\
+      $\omega_r\,r_2=\omega_e\,(r_2-r_1)\ \Rightarrow\ \dfrac{\omega_r}{\omega_e}=\dfrac{e}{r_2}=\dfrac13$\\[3pt]
+      El eje gira 3 veces por vuelta del rotor; cada c\'amara\\
+      completa su ciclo de 4 tiempos en $1080^\circ$ de eje.};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

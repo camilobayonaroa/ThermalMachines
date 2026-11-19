@@ -1,0 +1,58 @@
+% NB11b -- Por que el Wankel quema distinto: camara alargada y movil, bujias "leading/trailing",
+% flujo de compresion (squish) hacia adelante, bolsillo de mezcla sin quemar en la cola (HC) y
+% abstraccion 0D de dos zonas (quemada b / sin quemar u) usada en el cuadernillo.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,decorations.pathmorphing}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{quem}{HTML}{E34948}
+\definecolor{fresca}{HTML}{2A78D6}
+\definecolor{hc}{HTML}{EDA100}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[lbl, font=\bfseries, anchor=west] at (-0.4,3.9) {(a) C\'amara de combusti\'on cerca del PMS (vista desarrollada)};
+  % pared del estator (arriba) y flanco del rotor (abajo) con bolsillo (recess)
+  \draw[tinta, line width=1.6pt] (0,2.2) .. controls (3,2.6) and (7,2.6) .. (10,2.2);
+  \draw[superior, line width=1.6pt] (0,1.55) -- (3.0,1.55) .. controls (3.4,0.75) and (5.6,0.75) .. (6.0,1.55) -- (10,1.55);
+  \node[lbl, superior, font=\footnotesize] at (4.5,0.55) {bolsillo del rotor (\emph{recess})};
+  \fill[tinta] (0,1.4) rectangle (0.15,2.35); \fill[tinta] (9.85,1.4) rectangle (10,2.35);
+  \node[lbl, font=\footnotesize, align=center] at (0,0.95) {\'apice\\ trasero}; \node[lbl, font=\footnotesize, align=center] at (10,0.95) {\'apice\\ delantero};
+  % gases
+  \fill[quem!35] (5.3,1.58) .. controls (5.6,2.2) and (7.4,2.4) .. (8.2,2.35) -- (8.2,1.58) -- cycle;
+  \fill[quem!35] (4.0,1.0) .. controls (4.6,0.9) and (5.4,1.0) .. (5.6,1.3) -- (5.3,1.58) -- (3.6,1.58) -- cycle;
+  \draw[quem, line width=1.4pt, decorate, decoration={snake, amplitude=0.6mm, segment length=3mm}] (8.2,1.6) -- (8.2,2.33);
+  \draw[quem, line width=1.4pt, decorate, decoration={snake, amplitude=0.6mm, segment length=3mm}] (3.6,1.6) .. controls (3.4,1.9) and (3.4,2.1) .. (3.5,2.38);
+  \fill[hc!45] (0.15,1.56) -- (1.8,1.56) .. controls (1.6,1.9) and (1.4,2.2) .. (1.2,2.33) -- (0.15,2.28) -- cycle;
+  \node[lbl, font=\footnotesize, align=center] at (1.0,2.8) {gas sin quemar\\ atrapado (HC)};
+  \draw[-{Stealth}, hc, line width=0.8pt] (1.0,2.5) -- (0.9,2.05);
+  % bujias
+  \foreach \x/\t in {4.6/{T (trailing)},6.6/{L (leading)}} {
+    \fill[tinta] (\x-0.08,2.45) rectangle (\x+0.08,3.0); \node[lbl, font=\footnotesize, above] at (\x,3.0) {\t};
+    \draw[quem, line width=1pt] (\x,2.4) -- ++(-0.1,-0.15) -- ++(0.15,0) -- ++(-0.1,-0.15);}
+  % flujo de squish
+  \foreach \y in {1.75,2.05} \draw[-{Stealth[length=2.2mm]}, fresca, line width=1pt] (1.9,\y) -- (3.2,\y);
+  \node[lbl, fresca, font=\footnotesize] at (2.55,1.35) {flujo de compresi\'on};
+  \draw[-{Stealth[length=3mm]}, tinta, line width=1.2pt] (8.2,3.3) -- (9.4,3.3) node[lbl, right, font=\footnotesize] {giro del rotor};
+  \node[lbl, quem, font=\footnotesize] at (7.0,1.85) {quemado $b$};
+  \node[lbl, fresca, font=\footnotesize] at (9.0,1.85) {$u$};
+  % relacion superficie/volumen
+  \node[lbl, align=left, anchor=north west, font=\small] at (-0.4,0.1) {%
+    $\bullet$ c\'amara larga y delgada: relaci\'on superficie/volumen $\sim 2$-$3\times$ la de un pist\'on $\Rightarrow$ m\'as calor a las paredes\\
+    $\bullet$ la llama debe recorrer $\sim 1.5R$ contra el flujo de compresi\'on: combusti\'on m\'as lenta (2 buj\'ias)\\
+    $\bullet$ la cola fr\'ia junto al \'apice trasero no quema: HC alto; $T$ pico menor: NO$_x$ bajo (Yamamoto, Fig. 4.4)};
+  % ---------------- (b) ----------------
+  \begin{scope}[shift={(13.6,0)}]
+    \node[lbl, font=\bfseries, anchor=west] at (-0.3,3.9) {(b) Modelo 0D de dos zonas};
+    \draw[tinta, line width=1.2pt, rounded corners=10pt] (0,0.3) rectangle (4.4,2.6);
+    \fill[quem!30] (0.05,0.35) rectangle (2.2,2.55); \fill[fresca!20] (2.2,0.35) rectangle (4.35,2.55);
+    \draw[quem, line width=1.4pt, decorate, decoration={snake, amplitude=0.6mm, segment length=3mm}] (2.2,0.35) -- (2.2,2.55);
+    \node[lbl, font=\small, align=center] at (1.1,1.45) {$b$: equilibrio\\ $T_b,\ V_b$};
+    \node[lbl, font=\small, align=center] at (3.3,1.45) {$u$: qu\'imica\\ detallada $T_u$};
+    \draw[-{Stealth[length=3mm]}, tinta, line width=1.2pt] (3.0,0.1) -- (1.4,0.1) node[lbl, midway, below, font=\footnotesize] {$\dot m_b$ (Wiebe)};
+    \node[lbl, align=left, anchor=north west, font=\small] at (-0.3,-0.95) {%
+      $\bullet$ misma $p(t)$; $V=V_u+V_b=V_i(\theta)$\\
+      $\bullet$ $\dot m_b$ desde la chispa con\\ \phantom{$\bullet$} duraci\'on mayor que en el pist\'on\\
+      $\bullet$ gas sin quemar: autoencendido\\ \phantom{$\bullet$} (detonaci\'on) con cin\'etica en $t$};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

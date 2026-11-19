@@ -1,0 +1,39 @@
+% NB11b -- Arquitectura del modelo integrado del Wankel: geometria epitrocoidal 2D -> volumen de 3 camaras ->
+% termoquimica 0D de dos zonas (EDO en el tiempo) -> fuerzas en los flancos -> par en el eje excentrico.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,positioning}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{mec}{HTML}{2A78D6}\definecolor{ter}{HTML}{E34948}\definecolor{geo}{HTML}{1BAF7A}
+\begin{tikzpicture}[x=1cm,y=1cm,
+  bloque/.style={draw, line width=1.2pt, rounded corners=4pt, align=left, font=\small, inner sep=6pt, text width=6.4cm},
+  info/.style={-{Stealth[length=3mm]}, line width=1.1pt, tinta},
+  et/.style={font=\footnotesize, text=tinta, fill=white, inner sep=1.5pt, align=center}]
+  \node[bloque, draw=geo, fill=geo!8] (G) at (0,4.6) {%
+    \textbf{Geometr\'ia 2D} \hfill {\footnotesize exacta}\\
+    estator: epitrocoide $x=R\cos\theta+e\cos3\theta$\\
+    rotor: envolvente interior; engranaje $2e{:}3e$\\
+    $V_i(\theta)=V_{min}+\tfrac{V_H}{2}\big[1-\sin(\tfrac23\theta+\varphi_i)\big]$, $V_H=3\sqrt3\,eRb$};
+  \node[bloque, draw=ter, fill=ter!8] (T) at (4.8,0) {%
+    \textbf{Termoqu\'imica 0D} \hfill {\footnotesize EDO en $t=\theta/\omega_e$}\\
+    dos zonas $u/b$ por c\'amara (Cantera)\\
+    combusti\'on: $\dot m_b$ (Wiebe) desde la chispa\\
+    gas sin quemar: iso-octano 143 especies\\
+    Woschni con \'area de pared del Wankel};
+  \node[bloque, draw=mec, fill=mec!8] (M) at (-4.8,0) {%
+    \textbf{Mec\'anica vectorial} \hfill {\footnotesize cuasi-est\'atica}\\
+    $\vec F_i=(p_i-p_c)\sqrt3Rb\,\hat n_i$ (por $C$)\\
+    $\tau_{eje}=\sum_i\vec e\times\vec F_i$\\
+    verificaci\'on: $\tau\,\omega_e=\sum p_i\dot V_i$};
+  \node[bloque, draw=tinta, fill=metal!25] (E) at (0,-4.4) {%
+    \textbf{Motor} \hfill {\footnotesize 3 c\'amaras desfasadas $360^\circ$, $n$ rotores}\\
+    par instant\'aneo y medio, IMEP, BMEP (FMEP medida),\\
+    potencia vs. rpm, $C_s$ con volante};
+  \draw[info] (G.south east) to[bend left=12] node[et] {$V_i(t),\ \dot V_i(t)$} (T.north);
+  \draw[info] (G.south west) to[bend right=12] node[et] {$\vec e(\theta),\ \hat n_i(\theta)$} (M.north);
+  \draw[info] (T.west) -- node[et] {$p_i(t)$} (M.east);
+  \draw[info] (M.south) to[bend right=12] node[et] {$\tau_{eje}(\theta)$} (E.north west);
+  \draw[info] (T.south) to[bend left=12] node[et] {$W_i,\ \dot Q_w$} (E.north east);
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,45 @@
+% NB11b -- Secuencias de fases por camara: Wankel 4T (estator 2 lobulos, rotor 3 caras) frente a las
+% variantes de 6 tiempos de Rojas Baron & Serpa Paez (TG253015): A supercargador, B inyeccion de agua
+% (estator 3 lobulos, rotor 4 caras) y C valvula de expansion (estator 4 lobulos, rotor 5 caras).
+% Reemplaza las secuencias dibujadas a mano (superch.jpg, agua.jpg, Valvula de exp.jpg, 3L4P/4L5P).
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc}
+\begin{document}
+\input{_estilo.tex}
+\definecolor{adm}{HTML}{2A78D6}\definecolor{comp}{HTML}{1BAF7A}\definecolor{comb}{HTML}{E34948}
+\definecolor{exps}{HTML}{EB6834}\definecolor{esc}{HTML}{8A8A86}\definecolor{esp}{HTML}{4A3AA7}
+\begin{tikzpicture}[x=1cm,y=1cm, fase/.style={draw=white, line width=0.8pt, minimum height=0.62cm, font=\scriptsize\bfseries, text=white, inner sep=0}]
+  \newcommand{\barra}[4]{\node[fase, fill=#3, minimum width=#2 cm, anchor=west] at (#1,\y) {#4};}
+  \node[lbl, font=\bfseries, anchor=west] at (-3.4,1.2) {Una c\'amara a lo largo de su ciclo (escala: 1 cm = 1 carrera de volumen m\'ax.$\to$m\'in.)};
+  % 4T
+  \def\y{0}
+  \node[lbl, anchor=east, align=right, font=\small] at (-0.2,\y) {\textbf{4T} (2 l\'obulos, rotor 3 caras)\\ $\omega_r=\omega_e/3$, ciclo $=1080^\circ$ de eje};
+  \barra{0}{2}{adm}{admisi\'on}\barra{2}{2}{comp}{compresi\'on}\barra{4}{0.25}{comb}{}\barra{4.25}{1.75}{exps}{expansi\'on}\barra{6}{2}{esc}{escape}
+  % A
+  \def\y{-1.3}
+  \node[lbl, anchor=east, align=right, font=\small] at (-0.2,\y) {\textbf{6T-A supercargador}\\ (3 l\'obulos, rotor 4 caras)};
+  \barra{0}{2}{adm}{adm.}\barra{2}{2}{comp}{comp. 1}\barra{4}{0.25}{comb}{}\barra{4.25}{0.9}{exps}{exp. 1}\barra{5.15}{0.2}{esp}{}\barra{5.35}{0.65}{exps}{}
+  \barra{6}{2}{comp}{comp. 2}\barra{8}{0.25}{comb}{}\barra{8.25}{1.75}{exps}{exp. 2}\barra{10}{2}{esc}{escape}
+  \node[lbl, esp, font=\scriptsize, above] at (5.25,\y+0.3) {aire del plenum};
+  % B
+  \def\y{-2.6}
+  \node[lbl, anchor=east, align=right, font=\small] at (-0.2,\y) {\textbf{6T-B inyecci\'on de agua}\\ (3 l\'obulos, rotor 4 caras)};
+  \barra{0}{2}{adm}{adm.}\barra{2}{2}{comp}{comp. 1}\barra{4}{0.25}{comb}{}\barra{4.25}{1.75}{exps}{exp. 1}
+  \barra{6}{2}{comp}{comp. 2}\barra{8}{0.25}{esp}{}\barra{8.25}{1.75}{exps}{exp. vapor}\barra{10}{2}{esc}{escape}
+  \node[lbl, esp, font=\scriptsize, above] at (8.12,\y+0.3) {agua};
+  % C
+  \def\y{-3.9}
+  \node[lbl, anchor=east, align=right, font=\small] at (-0.2,\y) {\textbf{6T-C v\'alvula de expansi\'on}\\ (4 l\'obulos, rotor 5 caras)};
+  \barra{0}{2}{adm}{adm.}\barra{2}{2}{comp}{comp. 1}\barra{4}{0.25}{comb}{}\barra{4.25}{1.75}{exps}{exp. 1}\barra{6}{2}{esc}{purga}
+  \barra{8}{2}{adm}{adm. 2 + EGR}\barra{10}{2}{comp}{comp. 2}\barra{12}{0.25}{comb}{}\barra{12.25}{1.75}{exps}{exp. 2}\barra{14}{2}{esc}{escape}
+  % leyenda y relaciones
+  \foreach \c/\t [count=\i] in {adm/admisi\'on,comp/compresi\'on,comb/combusti\'on,exps/expansi\'on,esc/escape o purga,esp/evento especial} {
+    \fill[\c] ({-3.2+2.9*(\i-1)},-5.0) rectangle ++(0.4,0.3); \node[lbl, anchor=west, font=\small] at ({-2.75+2.9*(\i-1)},-4.85) {\t};}
+  \node[lbl, align=left, anchor=north west, font=\small] at (-3.4,-5.4) {%
+    Geometr\'ia generalizada (TG253015): estator de $N_e$ l\'obulos y rotor de $N_r=N_e+1$ caras, $\kappa=\omega_r/\omega_e=1/N_r$.\\
+    M\'as l\'obulos permiten m\'as carreras por ciclo, pero la relaci\'on de compresi\'on geom\'etrica \textbf{cae} (c\'amaras m\'as ``abiertas'').\\
+    Prueba de la 2.\textsuperscript{a} ley: ning\'un ciclo con calor a volumen m\'inimo puede superar $\eta_{Otto}(r_c)=1-r_c^{\,1-k}$ con el mismo $r_c$\\
+    \emph{si} se contabiliza todo el trabajo externo (soplador, bomba) y toda la energ\'ia que entra.};
+\end{tikzpicture}
+\end{document}
